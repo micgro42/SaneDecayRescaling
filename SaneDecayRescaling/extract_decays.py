@@ -15,9 +15,6 @@ def extract_decays(PathToDecayFile, particle):
             print "String 'Decay %s' not found!" % (particle)
             return 1 
     
-    print "String 'Decay %s' found at line %i:" % (particle, linenumberBeginDecay)
-    print line,
-    
     stringfound = -1
     workfile = open('workfile.tmp','w')
     workfile.write(line)
@@ -30,10 +27,7 @@ def extract_decays(PathToDecayFile, particle):
         if (line == ""):
             print "String 'Enddecay' not found!"
             return 2
-    
-    print "String 'Enddecay' found at line %i:" % (linenumberEndDecay)
-    print line
-    
+      
     workfile.close()
     EvtGenDecayDec.close()
     return 0
