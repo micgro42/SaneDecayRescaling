@@ -38,15 +38,17 @@ class Testclass:
             elif i > 7:
                 break
     
-    
+    @raises(SystemExit)# TODO: Find a way to test exitcode
     def test_decay_not_found(self):
         assert blub('SourceDecayFile.dec.tmp', "B+") == 1
         assert not os.path.isfile("workdir.tmp")
-        
+    
+    @raises(SystemExit)# TODO: Find a way to test exitcode
     def test_decayfile_not_found(self):
         assert blub('XSourceDecayFile.dec.tmp', "B0") == 404 
         assert not os.path.isfile("workdir.tmp")
-    
+        
+    @raises(SystemExit) # TODO: Find a way to test exitcode
     def test_particle_name_incomplete(self):
         assert blub('SourceDecayFile.dec.tmp', "B") == 1
         assert not os.path.isfile("workdir.tmp")
