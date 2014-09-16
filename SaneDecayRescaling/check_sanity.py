@@ -21,6 +21,7 @@ def check_sanity(PathToReferenceFile, particle):
     for i, line in enumerate(generatorsFile):
         if (line != '\n'):
             generatorsList.append(line.rstrip('\n'))
+    generatorsFile.close()
     generatorsSet=set(generatorsList)
     
     print generatorsList
@@ -32,7 +33,7 @@ def check_sanity(PathToReferenceFile, particle):
         parts = line.split()
         try:
             BR=parts.pop(0)
-            float(BR)
+            BR=float(BR)
         except ValueError:
             pass
         else:
@@ -47,7 +48,7 @@ def check_sanity(PathToReferenceFile, particle):
             parts.append(secondLastElement)
                 
             print parts
-            
-            
+    workfile.close()
+    referencefile.close()       
 
 
