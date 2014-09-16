@@ -41,10 +41,10 @@ def check_sanity(PathToReferenceFile, particle):
             while (not generatorFound):
                 try:
                     lastElement = parts.pop(-1)
-                except:
+                except: # FIXME: catch only the correct exception
                     print "ERROR Generator not found in generators file"
                     print line
-                    exit(0)
+                    exit(1)
                 lastElement = lastElement.rstrip(';')
                 generatorFound = lastElement in generatorsSet
             secondLastElement = parts.pop(-1)
