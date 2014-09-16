@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 def extract_decays(PathToDecayFile, particle):
     try:
         EvtGenDecayDec = open(PathToDecayFile,'r')
