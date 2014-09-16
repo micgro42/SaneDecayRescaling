@@ -24,8 +24,6 @@ def check_sanity(PathToReferenceFile, particle):
     generatorsFile.close()
     generatorsSet=set(generatorsList)
     
-    print generatorsList
-    print generatorsSet
     
     for i, line in enumerate(workfile):
         if (line == '\n'):
