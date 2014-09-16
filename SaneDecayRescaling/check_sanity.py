@@ -1,4 +1,8 @@
-def check_sanity(PathToReferenceFile, particle):
+from extract_decays import extract_decays
+def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
+    if (extract_decays(PathToDecayFile,particle) != 0):
+        print "ERROR finding decay. Exiting"
+        exit(1)
     try:
         workfile = open("workfile.tmp",'r')
     except IOError:
