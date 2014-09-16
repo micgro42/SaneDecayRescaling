@@ -50,7 +50,7 @@ def check_sanity(PathToReferenceFile, particle):
                 secondLastElement = parts.pop(-1)
             parts.append(secondLastElement)
                 
-            print parts
+
             ReferenceBR,ReferenceBRE=findDecayInReference(referencefile,parts)
             if (ReferenceBR == -1):
                 print "Warning: Decay ", particle, "to", parts, "not found"
