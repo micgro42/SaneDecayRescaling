@@ -1,25 +1,26 @@
+import os
 from extract_decays import extract_decays
 def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
     if (extract_decays(PathToDecayFile,particle) != 0):
-        print "ERROR finding decay. Exiting"
-        exit(1)
+        print "ERROR finding decay in Source File. Exiting"
+        raise SystemExit,os.EX_DATAERR
     try:
         workfile = open("workfile.tmp",'r')
     except IOError:
         print 'cannot open', "workfile.tmp"
-        return 404
+        raise SystemExit,os.EX_SOFTWARE
     
     try:
         referencefile = open(PathToReferenceFile,'r')
     except IOError:
         print 'cannot open', PathToReferenceFile
-        return 404
+        raise SystemExit,os.EX_IOERR
     
     try:
         generatorsFile = open("generators",'r')
     except IOError:
         print 'cannot open', "generators"
-        return 404
+        raise SystemExit,os.EX_IOERR
     
     generatorsList=[]
     for i, line in enumerate(generatorsFile):
@@ -46,7 +47,7 @@ def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
                 except: # FIXME: catch only the correct exception
                     print "ERROR Generator not found in generators file"
                     print line
-                    exit(1)
+                    raise SystemExit,os.EX_SOFTWARE
                 lastElement = lastElement.rstrip(';')
                 generatorFound = lastElement in generatorsSet
             secondLastElement = parts.pop(-1)
@@ -65,7 +66,8 @@ def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
                 print "deviation %f sigma" % (abs((ReferenceBR-BR)/ReferenceBRE))
                 
     workfile.close()
-    referencefile.close()       
+    referencefile.close()
+    return 0
 
 
 def findDecayInReference(referencefile, decayList):
