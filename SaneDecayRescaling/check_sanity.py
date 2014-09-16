@@ -48,7 +48,50 @@ def check_sanity(PathToReferenceFile, particle):
             parts.append(secondLastElement)
                 
             print parts
+            ReferenceBR,ReferenceBRE=findDecayInReference(referencefile,parts)
+            if (ReferenceBR == -1):
+                print "Warning: Decay ", particle, "to", parts, "not found"
+            elif (ReferenceBR != BR):
+                print "Warning: Decay ", particle, "to", parts, " has a different branching ratios in source and reference file"
+                print "source file branching ratio: %f" % (BR)
+                print "reference file branching ratio: %f +- %f" % (ReferenceBR, ReferenceBRE)
+                print "deviation %f sigma" % (abs((ReferenceBR-BR)/ReferenceBRE))
+                
     workfile.close()
     referencefile.close()       
+
+
+def findDecayInReference(referencefile, decayList):
+    decayList.sort()
+    referencefile.seek(0)
+    decayFound = False
+    for i, line in enumerate(referencefile):
+        if (line == '\n'):
+            continue
+        parts = line.split()
+        try:
+            BR=parts.pop(0)
+            BR=float(BR)
+            BRE=parts.pop(0)
+            BRE=float(BRE)
+        except ValueError:
+            pass
+        else:
+            parts.sort()
+#             print parts
+            if (decayList == parts):
+                decayFound = True
+                break
+    if (decayFound):
+        return BR, BRE
+    else:
+        return -1,-1
+    
+    
+    
+
+
+
+
 
 
