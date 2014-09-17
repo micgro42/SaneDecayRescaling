@@ -9,27 +9,27 @@ def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
     except IOError:
         print 'cannot open', "workfile.tmp"
         raise SystemExit(os.EX_SOFTWARE)
-    
+
     try:
         referencefile = open(PathToReferenceFile, 'r')
     except IOError:
         print 'cannot open', PathToReferenceFile
         raise SystemExit(os.EX_IOERR)
-    
+
     try:
         generatorsFile = open("generators", 'r')
     except IOError:
         print 'cannot open', "generators"
         raise SystemExit(os.EX_IOERR)
-    
+
     generatorsList = []
     for i, line in enumerate(generatorsFile):
         if (line != '\n'):
             generatorsList.append(line.rstrip('\n'))
     generatorsFile.close()
     generatorsSet = set(generatorsList)
-    
-    
+
+
     for i, line in enumerate(workfile):
         if (line == '\n'):
             continue
@@ -54,7 +54,7 @@ def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
             while (secondLastElement in generatorsSet):
                 secondLastElement = parts.pop(-1)
             parts.append(secondLastElement)
-                
+
 
             ReferenceBR, ReferenceBRE = findDecayInReference(referencefile, parts)
             if (ReferenceBR == -1):
@@ -64,7 +64,7 @@ def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
                 print "source file branching ratio: %f" % (BR)
                 print "reference file branching ratio: %f +- %f" % (ReferenceBR, ReferenceBRE)
                 print "deviation %f sigma" % (abs((ReferenceBR-BR)/ReferenceBRE))
-                
+
     workfile.close()
     referencefile.close()
     return 0
@@ -95,9 +95,6 @@ def findDecayInReference(referencefile, decayList):
         return BR, BRE
     else:
         return -1,-1
-    
-    
-    
 
 
 

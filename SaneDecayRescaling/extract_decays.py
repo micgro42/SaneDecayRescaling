@@ -5,7 +5,7 @@ def extract_decays(PathToDecayFile, particle):
     except IOError:
         print 'cannot open', PathToDecayFile
         raise SystemExit(os.EX_IOERR)
-    
+
     stringfound = -1
     linenumberBeginDecay = 0
     while (stringfound == -1):
@@ -15,7 +15,7 @@ def extract_decays(PathToDecayFile, particle):
         if (line == ""):
             print "String 'Decay %s' not found!" % (particle)
             raise SystemExit(os.EX_DATAERR)
-    
+
     stringfound = -1
     workfile = open('workfile.tmp','w')
     workfile.write(line)
@@ -28,7 +28,7 @@ def extract_decays(PathToDecayFile, particle):
         if (line == ""):
             print "String 'Enddecay' not found!"
             raise SystemExit(os.EX_DATAERR)
-      
+
     workfile.close()
     EvtGenDecayDec.close()
     return 0
