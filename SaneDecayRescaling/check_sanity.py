@@ -1,7 +1,7 @@
 import os
 from extract_decays import extract_decays
-def check_sanity(path_to_decay_file, PathToReferenceFile, particle):
-    if (extract_decays(path_to_decay_file, particle) != 0):
+def check_sanity(path_to_decayfile, path_to_referencefile, particle):
+    if (extract_decays(path_to_decayfile, particle) != 0):
         print "ERROR finding decay in Source File. Exiting"
         raise SystemExit(os.EX_DATAERR)
     try:
@@ -11,9 +11,9 @@ def check_sanity(path_to_decay_file, PathToReferenceFile, particle):
         raise SystemExit(os.EX_SOFTWARE)
 
     try:
-        referencefile = open(PathToReferenceFile, 'r')
+        referencefile = open(path_to_referencefile, 'r')
     except IOError:
-        print 'cannot open', PathToReferenceFile
+        print 'cannot open', path_to_referencefile
         raise SystemExit(os.EX_IOERR)
 
     try:
