@@ -1,7 +1,7 @@
 import os
 from extract_decays import extract_decays
-def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
-    if (extract_decays(PathToDecayFile, particle) != 0):
+def check_sanity(path_to_decay_file, PathToReferenceFile, particle):
+    if (extract_decays(path_to_decay_file, particle) != 0):
         print "ERROR finding decay in Source File. Exiting"
         raise SystemExit(os.EX_DATAERR)
     try:
@@ -17,17 +17,17 @@ def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
         raise SystemExit(os.EX_IOERR)
 
     try:
-        generatorsFile = open("generators", 'r')
+        generatorsfile = open("generators", 'r')
     except IOError:
         print 'cannot open', "generators"
         raise SystemExit(os.EX_IOERR)
 
-    generatorsList = []
-    for i, line in enumerate(generatorsFile):
+    generators_list = []
+    for i, line in enumerate(generatorsfile):
         if (line != '\n'):
-            generatorsList.append(line.rstrip('\n'))
-    generatorsFile.close()
-    generatorsSet = set(generatorsList)
+            generators_list.append(line.rstrip('\n'))
+    generatorsfile.close()
+    generators_set = set(generators_list)
 
 
     for i, line in enumerate(workfile):
@@ -40,23 +40,23 @@ def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
         except ValueError:
             pass
         else:
-            generatorFound = False
-            while (not generatorFound):
+            generator_found = False
+            while (not generator_found):
                 try:
-                    lastElement = parts.pop(-1)
+                    last_element = parts.pop(-1)
                 except: # FIXME: catch only the correct exception
                     print "ERROR Generator not found in generators file"
                     print line
                     raise SystemExit(os.EX_SOFTWARE)
-                lastElement = lastElement.rstrip(';')
-                generatorFound = lastElement in generatorsSet
-            secondLastElement = parts.pop(-1)
-            while (secondLastElement in generatorsSet):
-                secondLastElement = parts.pop(-1)
-            parts.append(secondLastElement)
+                last_element = last_element.rstrip(';')
+                generator_found = last_element in generators_set
+            second_last_element = parts.pop(-1)
+            while (second_last_element in generators_set):
+                second_last_element = parts.pop(-1)
+            parts.append(second_last_element)
 
 
-            ReferenceBR, ReferenceBRE = findDecayInReference(referencefile, parts)
+            ReferenceBR, ReferenceBRE = find_decay_in_reference(referencefile, parts)
             if (ReferenceBR == -1):
                 print "Warning: Decay ", particle, "to", parts, "not found"
             elif (ReferenceBR != BR):
@@ -70,10 +70,10 @@ def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
     return 0
 
 
-def findDecayInReference(referencefile, decayList):
-    decayList.sort()
+def find_decay_in_reference(referencefile, decay_list):
+    decay_list.sort()
     referencefile.seek(0)
-    decayFound = False
+    decay_found = False
     for i, line in enumerate(referencefile):
         if (line == '\n'):
             continue
@@ -88,13 +88,13 @@ def findDecayInReference(referencefile, decayList):
         else:
             parts.sort()
 #             print parts
-            if (decayList == parts):
-                decayFound = True
+            if (decay_list == parts):
+                decay_found = True
                 break
-    if (decayFound):
+    if (decay_found):
         return BR, BRE
     else:
-        return -1,-1
+        return -1, -1
 
 
 
