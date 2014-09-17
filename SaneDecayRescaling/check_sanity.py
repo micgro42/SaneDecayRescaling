@@ -1,33 +1,33 @@
 import os
 from extract_decays import extract_decays
 def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
-    if (extract_decays(PathToDecayFile,particle) != 0):
+    if (extract_decays(PathToDecayFile, particle) != 0):
         print "ERROR finding decay in Source File. Exiting"
         raise SystemExit(os.EX_DATAERR)
     try:
-        workfile = open("workfile.tmp",'r')
+        workfile = open("workfile.tmp", 'r')
     except IOError:
         print 'cannot open', "workfile.tmp"
         raise SystemExit(os.EX_SOFTWARE)
     
     try:
-        referencefile = open(PathToReferenceFile,'r')
+        referencefile = open(PathToReferenceFile, 'r')
     except IOError:
         print 'cannot open', PathToReferenceFile
         raise SystemExit(os.EX_IOERR)
     
     try:
-        generatorsFile = open("generators",'r')
+        generatorsFile = open("generators", 'r')
     except IOError:
         print 'cannot open', "generators"
         raise SystemExit(os.EX_IOERR)
     
-    generatorsList=[]
+    generatorsList = []
     for i, line in enumerate(generatorsFile):
         if (line != '\n'):
             generatorsList.append(line.rstrip('\n'))
     generatorsFile.close()
-    generatorsSet=set(generatorsList)
+    generatorsSet = set(generatorsList)
     
     
     for i, line in enumerate(workfile):
@@ -35,8 +35,8 @@ def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
             continue
         parts = line.split()
         try:
-            BR=parts.pop(0)
-            BR=float(BR)
+            BR = parts.pop(0)
+            BR = float(BR)
         except ValueError:
             pass
         else:
@@ -56,7 +56,7 @@ def check_sanity(PathToDecayFile, PathToReferenceFile, particle):
             parts.append(secondLastElement)
                 
 
-            ReferenceBR,ReferenceBRE=findDecayInReference(referencefile,parts)
+            ReferenceBR, ReferenceBRE = findDecayInReference(referencefile, parts)
             if (ReferenceBR == -1):
                 print "Warning: Decay ", particle, "to", parts, "not found"
             elif (ReferenceBR != BR):
@@ -79,10 +79,10 @@ def findDecayInReference(referencefile, decayList):
             continue
         parts = line.split()
         try:
-            BR=parts.pop(0)
-            BR=float(BR)
-            BRE=parts.pop(0)
-            BRE=float(BRE)
+            BR = parts.pop(0)
+            BR = float(BR)
+            BRE = parts.pop(0)
+            BRE = float(BRE)
         except ValueError:
             pass
         else:
