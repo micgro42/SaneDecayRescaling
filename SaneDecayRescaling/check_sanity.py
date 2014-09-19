@@ -35,8 +35,8 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
             continue
         parts = line.split()
         try:
-            BR = parts.pop(0)
-            BR = float(BR)
+            branching_ratio = parts.pop(0)
+            branching_ratio = float(branching_ratio)
         except ValueError:
             pass
         else:
@@ -56,14 +56,14 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
             parts.append(second_last_element)
 
 
-            ReferenceBR, ReferenceBRE = find_decay_in_reference(referencefile, parts)
-            if (ReferenceBR == -1):
+            reference_branching_ratio, reference_branching_ratio_error = find_decay_in_reference(referencefile, parts)
+            if (reference_branching_ratio == -1):
                 print "Warning: Decay ", particle, "to", parts, "not found"
-            elif (ReferenceBR != BR):
+            elif (reference_branching_ratio != branching_ratio):
                 print "Warning: Decay ", particle, "to", parts, " has a different branching ratios in source and reference file"
-                print "source file branching ratio: %f" % (BR)
-                print "reference file branching ratio: %f +- %f" % (ReferenceBR, ReferenceBRE)
-                print "deviation %f sigma" % (abs((ReferenceBR-BR)/ReferenceBRE))
+                print "source file branching ratio: %f" % (branching_ratio)
+                print "reference file branching ratio: %f +- %f" % (reference_branching_ratio, reference_branching_ratio_error)
+                print "deviation %f sigma" % (abs((reference_branching_ratio-branching_ratio)/reference_branching_ratio_error))
 
     workfile.close()
     referencefile.close()
@@ -73,7 +73,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
 def find_decay_in_reference(referencefile, decay_list):
     """search for decay in provided reference file
 
-    
+
     """
 
     decay_list.sort()
