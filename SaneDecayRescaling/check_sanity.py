@@ -71,6 +71,11 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
 
 
 def find_decay_in_reference(referencefile, decay_list):
+    """search for decay in provided reference file
+
+    
+    """
+
     decay_list.sort()
     referencefile.seek(0)
     decay_found = False

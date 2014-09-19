@@ -1,5 +1,10 @@
 import os
 def extract_decays(path_to_decay_file, particle):
+    """get the decays from an EvtGen Decay.Dec file and write them to disk
+
+    return is 0 on success, Exception otherwise
+    """
+
     try:
         EvtGenDecayDec = open(path_to_decay_file, 'r')
     except IOError:
