@@ -9,23 +9,9 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     if (extract_decays(path_to_decayfile, particle) != 0):
         print "ERROR finding decay in Source File. Exiting"
         raise SystemExit(os.EX_DATAERR)
-    try:
-        workfile = open("workfile.tmp", 'r')
-    except IOError:
-        print 'cannot open', "workfile.tmp"
-        raise SystemExit(os.EX_SOFTWARE)
-
-    try:
-        referencefile = open(path_to_referencefile, 'r')
-    except IOError:
-        print 'cannot open', path_to_referencefile
-        raise SystemExit(os.EX_IOERR)
-
-    try:
-        generatorsfile = open("generators", 'r')
-    except IOError:
-        print 'cannot open', "generators"
-        raise SystemExit(os.EX_IOERR)
+    workfile = open_file_safely("workfile.tmp", 'r')
+    referencefile = open_file_safely(path_to_referencefile, 'r')
+    generatorsfile = open_file_safely("generators", 'r')
 
     generators_list = []
     for i, line in enumerate(generatorsfile):
@@ -106,7 +92,15 @@ def find_decay_in_reference(referencefile, decay_list):
     else:
         return -1, -1
 
+def open_file_safely(path_to_file, modus):
+    """tries top open the file and exit on fail"""
 
+    try:
+        open_file = open(path_to_file, modus)
+    except IOError:
+        print 'cannot open', path_to_file
+        raise SystemExit(os.EX_IOERR)
+    return open_file
 
 
 
