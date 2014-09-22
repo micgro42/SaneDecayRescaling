@@ -1,6 +1,6 @@
 from nose.tools import ok_, assert_raises
 import os
-from SaneDecayRescaling.extract_decays import extract_decays as blub
+from sanedecayrescaling.extract_decays import extract_decays as blub
 
 class Testclass:
 

@@ -1,5 +1,5 @@
 from nose.tools import *
-import SaneDecayRescaling
+import sanedecayrescaling
 
 def setup():
     print "SETUP!"
