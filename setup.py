@@ -3,8 +3,10 @@ try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
+import os
 
 config = {
+    'name': 'SaneDecayRescaling',
     'description': 'My Project',
     'author': 'Michael Große',
     'url': 'https://github.com/micgro42/SaneDecayRescaling',
@@ -12,9 +14,9 @@ config = {
     'author_email': 'micgro42@physik.hu-berlin.de',
     'version': '0.0.1',
     'install_requires': ['nose'],
-    'packages': ['SaneDecayRescaling'],
+    'packages': ['sanedecayrescaling','sanedecayrescaling.tests'],
     'scripts': [],
-    'name': 'Sane Decay Rescaling'
+    'long_description': open('README.rst', 'r').read(),
 }
 
 setup(**config)
