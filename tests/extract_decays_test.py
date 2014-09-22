@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from nose.tools import *
+from nose.tools import ok_, assert_raises
 import os
 from SaneDecayRescaling.extract_decays import extract_decays as blub
 
@@ -20,13 +19,13 @@ class Testclass:
         SourceDecayFile.write("some lines at end\n")
         SourceDecayFile.write("last line of the file")
         SourceDecayFile.close()
-    
+
     def tearDown(self):
         print "TEAR DOWN!"
         os.remove("SourceDecayFile.dec.tmp")
         if os.path.isfile("workfile.tmp"):
             os.remove("workfile.tmp")
-        
+
     def test_successfully_extracting_decay(self):
         assert blub('SourceDecayFile.dec.tmp', "B0") == 0
         workfile=open("workfile.tmp",'r')
@@ -37,25 +36,33 @@ class Testclass:
                 assert line == 'Enddecay\n'
             elif i > 7:
                 break
-    
-    @raises(SystemExit)# TODO: Find a way to test exitcode
+
+
     def test_decay_not_found(self):
-        assert blub('SourceDecayFile.dec.tmp', "B+") == 1
-        assert not os.path.isfile("workdir.tmp")
-    
-    @raises(SystemExit)# TODO: Find a way to test exitcode
+        with assert_raises(SystemExit) as cm:
+            blub('SourceDecayFile.dec.tmp', "B+")
+        ex = cm.exception
+        ok_(ex.code == os.EX_DATAERR, 'SystemExit should be os.EX_DATAERR!')
+        ok_(not os.path.isfile("workdir.tmp"), "workdir.tmp has been created even so it shouldn't have been")
+
+
     def test_decayfile_not_found(self):
-        assert blub('XSourceDecayFile.dec.tmp', "B0") == 404 
-        assert not os.path.isfile("workdir.tmp")
-        
-    @raises(SystemExit) # TODO: Find a way to test exitcode
+        with assert_raises(SystemExit) as cm:
+            blub('XSourceDecayFile.dec.tmp', "B0")
+        ex = cm.exception
+        ok_(ex.code == os.EX_IOERR, 'SystemExit should be os.EX_IOERR!')
+        ok_(not os.path.isfile("workdir.tmp"), "workdir.tmp has been created even so it shouldn't have been")
+
+
     def test_particle_name_incomplete(self):
-        assert blub('SourceDecayFile.dec.tmp', "B") == 1
-        assert not os.path.isfile("workdir.tmp")
-    
-    
-        
-    
+        with assert_raises(SystemExit) as cm:
+            blub('SourceDecayFile.dec.tmp', "B")
+        ex = cm.exception
+        ok_(ex.code == os.EX_DATAERR, 'SystemExit should be os.EX_DATAERR!')
+        ok_(not os.path.isfile("workdir.tmp"), "workdir.tmp has been created even so it shouldn't have been")
+
+
+
 if __name__ == '__main__':
     unittest.main()
     
