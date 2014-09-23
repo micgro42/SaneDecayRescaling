@@ -12,14 +12,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     
     workfile = open_file_safely("workfile.tmp", 'r')
     referencefile = open_file_safely(path_to_referencefile, 'r')
-    generatorsfile = open_file_safely("generators", 'r')
-
-    generators_list = []
-    for i, line in enumerate(generatorsfile):
-        if (line != '\n'):
-            generators_list.append(line.rstrip('\n'))
-    generatorsfile.close()
-    generators_set = set(generators_list)
+    generators_set = get_generators()
 
 
     for i, line in enumerate(workfile):
@@ -60,6 +53,36 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     workfile.close()
     referencefile.close()
     return 0
+
+
+def get_generators():
+    generators = [
+	"VSS",
+	"VSP_PWAVE",
+	"PHOTOS",
+	"ISGW2",
+	"VUB",
+	"PHSP",
+	"SVS",
+	"SVV_HELAMP",
+	"HELAMP",
+	"BTOXSGAMMA",
+	"SLN",
+	"CB3PI-P00",
+	"CB3PI-MPP",
+	"STS",
+	"PYTHIA",
+	"PI0_DALITZ",
+	"D_DALITZ",
+	"VSS_BMIX",
+	"VVS_PWAVE",
+	"VVPIPI",
+	"PARTWAVE",
+	"ETA_DALITZ",
+	"SVP_HELAMP",
+	"BTO3PI_CP"]
+    return set(generators)
+
 
 
 def find_decay_in_reference(referencefile, decay_list):
