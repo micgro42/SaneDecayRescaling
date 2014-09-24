@@ -1,7 +1,7 @@
-from nose.tools import *
 import os
 from sanedecayrescaling import check_sanity as cs
 from pytest import fixture
+import pytest
 
 
 #
@@ -65,7 +65,8 @@ def fixture_source_reference(request):
 def test_open_safely_ok_read(fixture_source_reference):
     read_only_file = cs.open_file_safely(
                     'source_decay_file.dec.tmp', 'r')
-    assert_raises(IOError, read_only_file.write, 'foo')
+    with pytest.raises(IOError):
+        read_only_file.write('foo')
 
 def test_open_safely_ok_write(fixture_source_reference):
     writeable_file = cs.open_file_safely(
@@ -74,28 +75,26 @@ def test_open_safely_ok_write(fixture_source_reference):
     writeable_file.close()
 
 def test_open_safely_file_not_found(fixture_source_reference):
-    with assert_raises(SystemExit) as cm:
+    with pytest.raises(SystemExit) as cm:
         cs.open_file_safely('foo.tmp','r')
-    ex = cm.exception
-    ok_(ex.code == os.EX_IOERR, 'SystemExit should be os.EX_IOERR!')
+    ex = cm.value
+    assert ex.code == os.EX_IOERR # SystemExit should be os.EX_IOERR!
 
 def test_find_decay_found(fixture_source_reference):
     reference_file = open('reference.dec.tmp')
     decay_list = ["pi+", "D0"]
     branching_ratio, branching_ratio_error = cs.find_decay_in_reference (
                                             reference_file,decay_list)
-    eq_(branching_ratio, 0.6770, "should be the value from the decay file")
-    eq_(branching_ratio_error, 0.005,
-        "should be the value from the decay file")
+    assert branching_ratio == 0.6770 # should be the value from the decay file
+    assert branching_ratio_error == 0.005 # "should be the value from the decay file")
 
 def test_find_decay_not_found(fixture_source_reference):
     reference_file = open('reference.dec.tmp')
     decay_list = ["pi+", "D+"]
     branching_ratio, branching_ratio_error = cs.find_decay_in_reference (
                                             reference_file,decay_list)
-    eq_(branching_ratio, -1, "should be -1 if decay not found")
-    eq_(branching_ratio_error, -1,
-        "should be -1 if decay not found")
+    assert branching_ratio == -1 # should be -1 if decay not found
+    assert branching_ratio_error == -1 # should be -1 if decay not found
 
 
 def test_check_sanity_ok(fixture_source_reference):

@@ -1,7 +1,7 @@
-from nose.tools import ok_, assert_raises
 import os
 from sanedecayrescaling.extract_decays import extract_decays as blub
 from pytest import fixture
+import pytest
 
 @fixture  # Registering this function as a fixture.
 def fixture_source(request):
@@ -40,27 +40,27 @@ def test_successfully_extracting_decay(fixture_source):
 
 
 def test_decay_not_found(fixture_source):
-    with assert_raises(SystemExit) as cm:
+    with pytest.raises(SystemExit) as cm:
         blub('SourceDecayFile.dec.tmp', "B+")
-    ex = cm.exception
-    ok_(ex.code == os.EX_DATAERR, 'SystemExit should be os.EX_DATAERR!')
-    ok_(not os.path.isfile("workdir.tmp"), "workdir.tmp has been created even so it shouldn't have been")
+    ex = cm.value
+    assert ex.code == os.EX_DATAERR # SystemExit should be os.EX_DATAERR!
+    assert not os.path.isfile("workdir.tmp") # workdir.tmp has been created even so it shouldn't have been
 
 
 def test_decayfile_not_found(fixture_source):
-    with assert_raises(SystemExit) as cm:
+    with pytest.raises(SystemExit) as cm:
         blub('XSourceDecayFile.dec.tmp', "B0")
-    ex = cm.exception
-    ok_(ex.code == os.EX_IOERR, 'SystemExit should be os.EX_IOERR!')
-    ok_(not os.path.isfile("workdir.tmp"), "workdir.tmp has been created even so it shouldn't have been")
+    ex = cm.value
+    assert ex.code == os.EX_IOERR # SystemExit should be os.EX_IOERR!
+    assert not os.path.isfile("workdir.tmp") # workdir.tmp has been created even so it shouldn't have been
 
 
 def test_particle_name_incomplete(fixture_source):
-    with assert_raises(SystemExit) as cm:
+    with pytest.raises(SystemExit) as cm:
         blub('SourceDecayFile.dec.tmp', "B")
-    ex = cm.exception
-    ok_(ex.code == os.EX_DATAERR, 'SystemExit should be os.EX_DATAERR!')
-    ok_(not os.path.isfile("workdir.tmp"), "workdir.tmp has been created even so it shouldn't have been")
+    ex = cm.value
+    assert ex.code == os.EX_DATAERR # SystemExit should be os.EX_DATAERR!
+    assert not os.path.isfile("workdir.tmp") # workdir.tmp has been created even so it shouldn't have been
 
 
 
