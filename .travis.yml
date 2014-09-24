@@ -3,6 +3,10 @@ python:
   - "2.7"
 # command to install dependencies
 install:
-  - pip install nose
+  - pip install pytest
+  - pip install coverage
+  - pip install coveralls
 # command to run tests
-script: nosetests
+script: coverage run --source=sanedecayrescaling setup.py test
+after_success:
+    coveralls
