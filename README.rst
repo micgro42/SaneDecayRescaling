@@ -29,4 +29,9 @@ current result of the tests at travis-ci:
    :target: https://travis-ci.org/micgro42/SaneDecayRescaling
 
 
+.. image:: https://coveralls.io/repos/micgro42/SaneDecayRescaling/badge.png
+  :target: https://coveralls.io/r/micgro42/SaneDecayRescaling
+
+
+
 see also: http://evtgen.warwick.ac.uk/
