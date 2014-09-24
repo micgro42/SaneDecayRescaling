@@ -1,12 +1,12 @@
 import os
-from extract_decays import extract_decays
+from extract_decays import *
 def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     """extract and compare the decays with a reference
 
 
     """
 
-    if (extract_decays(path_to_decayfile, particle) != 0):
+    if (extract_decays_from_decay(path_to_decayfile, particle) != 0):
         print "ERROR finding decay in Source File. Exiting"
         raise SystemExit(os.EX_DATAERR)
     

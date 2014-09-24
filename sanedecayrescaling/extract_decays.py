@@ -1,5 +1,6 @@
 import os
-def extract_decays(path_to_decay_file, particle):
+from check_sanity import open_file_safely
+def extract_decays_from_decay(path_to_decay_file, particle):
     """get the decays from an EvtGen Decay.Dec file and write them to disk
 
     return is 0 on success, Exception otherwise
@@ -38,3 +39,71 @@ def extract_decays(path_to_decay_file, particle):
     evtgen_decay_dec.close()
     return 0
 
+def extract_decays_from_reference(path_to_reference_file, particle):
+    reference_file = open_file_safely(path_to_reference_file, 'r')
+    stringfound = -1
+    linenumber_begin_decay = 0
+    while (stringfound == -1):
+        linenumber_begin_decay += 1
+        line = reference_file.readline()
+        stringfound=line.find(particle + " DECAY MODES")
+        if (line == ""):
+            print "String '%s DECAY MODES' not found!" % (particle)
+            raise SystemExit(os.EX_DATAERR)
+    print "string '%s DECAY MODES' found at line %i" % (particle, linenumber_begin_decay)
+    
+    stringfound = -1
+    linenumber_end_decay = linenumber_begin_decay
+    end_decay_string = "==========================================="
+    while (stringfound == -1):
+        linenumber_end_decay += 1
+        line = reference_file.readline()
+        stringfound=line.find(end_decay_string)
+        if (line == ""):
+            print "String '%s' not found!" % (end_decay_string)
+            raise SystemExit(os.EX_DATAERR)
+    
+    print "string '%s' found at line %i" % (end_decay_string, linenumber_end_decay)
+    
+    reference_file.seek(0)
+    work_reference_file = open('workreffile.tmp','w')
+    # somehow the linenumbers are one line off ?
+    for i, line in enumerate(reference_file):
+        if ((i > linenumber_begin_decay + 1) and (i < linenumber_end_decay - 2)):
+            lineparts = line.split()
+            print lineparts
+            scale = -2
+            decay_products = [lineparts[0], lineparts[1]]
+            print "decay products:", decay_products
+            if (lineparts[2]=='('):
+                lineparts.pop(2)
+            branching_ratio = lineparts[2]
+            branching_ratio = branching_ratio.rstrip('%')
+            branching_ratio = branching_ratio.rstrip(')')
+            branching_ratio = branching_ratio.lstrip('(')
+            branching_ratio = branching_ratio.split('+')
+            branching_ratio_error = branching_ratio.pop(-1)
+            branching_ratio = branching_ratio[0]
+            branching_ratio_error = branching_ratio_error.lstrip('-')
+            try:
+                branching_ratio = float(branching_ratio)
+                branching_ratio_error = float(branching_ratio_error)
+            except ValueError:
+                print "recognising branching fraction at line %i failed" % (i)
+                print line
+                raise SystemExit(os.EX_SOFTWARE)
+            branching_ratio = branching_ratio * (10 ** scale)
+            branching_ratio_error = branching_ratio_error * (10 ** scale)
+            
+            work_reference_file.writelines([str(branching_ratio), " ",
+                                            str(branching_ratio_error), " ",
+                                            decay_products[0], " ",
+                                            decay_products[1], "\n"])
+#             print "i", i
+#             print linenumber_begin_decay + 1
+#             print linenumber_end_decay - 2
+#             print line
+        if (i > linenumber_end_decay):
+            break
+    work_reference_file.close()
+    reference_file.close()
