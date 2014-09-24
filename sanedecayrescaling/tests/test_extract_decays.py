@@ -1,5 +1,5 @@
 import os
-from sanedecayrescaling.extract_decays import extract_decays as blub
+from sanedecayrescaling.extract_decays import extract_decays_from_decay as blub
 from pytest import fixture
 import pytest
 

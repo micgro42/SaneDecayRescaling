@@ -1,5 +1,5 @@
 import os
-from check_sanity import open_file_safely
+import utility
 def extract_decays_from_decay(path_to_decay_file, particle):
     """get the decays from an EvtGen Decay.Dec file and write them to disk
 

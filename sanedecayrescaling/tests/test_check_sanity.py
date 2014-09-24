@@ -2,6 +2,7 @@ import os
 from sanedecayrescaling import check_sanity as cs
 from pytest import fixture
 import pytest
+import sanedecayrescaling.utility as utility
 
 
 #
@@ -63,20 +64,20 @@ def fixture_source_reference(request):
             os.remove("reference.dec.tmp")
 
 def test_open_safely_ok_read(fixture_source_reference):
-    read_only_file = cs.open_file_safely(
+    read_only_file = utility.open_file_safely(
                     'source_decay_file.dec.tmp', 'r')
     with pytest.raises(IOError):
         read_only_file.write('foo')
 
 def test_open_safely_ok_write(fixture_source_reference):
-    writeable_file = cs.open_file_safely(
+    writeable_file = utility.open_file_safely(
                     'source_decay_file.dec.tmp', 'w')
     writeable_file.write('foo')
     writeable_file.close()
 
 def test_open_safely_file_not_found(fixture_source_reference):
     with pytest.raises(SystemExit) as cm:
-        cs.open_file_safely('foo.tmp','r')
+        utility.open_file_safely('foo.tmp','r')
     ex = cm.value
     assert ex.code == os.EX_IOERR # SystemExit should be os.EX_IOERR!
 
