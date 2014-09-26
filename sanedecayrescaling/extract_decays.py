@@ -107,3 +107,72 @@ def extract_decays_from_reference(path_to_reference_file, particle):
             break
     work_reference_file.close()
     reference_file.close()
+
+
+def extract_decay_from_lines(lines):
+    lines = lines.split("\n")
+
+# get scale of numbers
+    if (lines[0].find('%') != -1):
+        scale = 0.01
+    exponent = lines[0].find('E-')
+    if ( exponent != -1):
+        print lines[0][exponent+2]
+        scale = 1 / (10 ** float(lines[0][exponent+2]))
+
+# get daughters
+    parts = lines[0].split()
+    daughters = []
+    i = 0
+    while (parts[i][0] != '('):
+        daughters.append(parts[i])
+        i += 1
+
+# get branching fraction an errors
+    try:
+        parts[i][1]
+    except IndexError:
+        parts.pop(i)
+    else:
+        parts[i] = parts[i].lstrip('(')
+    try:
+        branching_fraction = float(parts[i])*scale
+    except ValueError:
+        branching_fraction = float(parts[i].split('+')[0])*scale
+    else:
+        parts.pop(i)
+    parts[i] = parts[i].rstrip('%')
+    parts[i] = parts[i].rstrip(')')
+    branching_fraction_error = float(parts[i].split('-')[1])*scale
+    return daughters, branching_fraction, branching_fraction_error
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
