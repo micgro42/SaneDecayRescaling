@@ -63,23 +63,7 @@ def fixture_source_reference(request):
         if os.path.isfile("reference.dec.tmp"):
             os.remove("reference.dec.tmp")
 
-def test_open_safely_ok_read(fixture_source_reference):
-    read_only_file = utility.open_file_safely(
-                    'source_decay_file.dec.tmp', 'r')
-    with pytest.raises(IOError):
-        read_only_file.write('foo')
 
-def test_open_safely_ok_write(fixture_source_reference):
-    writeable_file = utility.open_file_safely(
-                    'source_decay_file.dec.tmp', 'w')
-    writeable_file.write('foo')
-    writeable_file.close()
-
-def test_open_safely_file_not_found(fixture_source_reference):
-    with pytest.raises(SystemExit) as cm:
-        utility.open_file_safely('foo.tmp','r')
-    ex = cm.value
-    assert ex.code == os.EX_IOERR # SystemExit should be os.EX_IOERR!
 
 def test_find_decay_found(fixture_source_reference):
     reference_file = open('reference.dec.tmp')
