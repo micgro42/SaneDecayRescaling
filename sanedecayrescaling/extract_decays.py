@@ -51,7 +51,7 @@ def extract_decays_from_reference(path_to_reference_file, particle):
             print "String '%s DECAY MODES' not found!" % (particle)
             raise SystemExit(os.EX_DATAERR)
     print "string '%s DECAY MODES' found at line %i" % (particle, linenumber_begin_decay)
-    
+
     stringfound = -1
     linenumber_end_decay = linenumber_begin_decay
     end_decay_string = "==========================================="
@@ -62,9 +62,9 @@ def extract_decays_from_reference(path_to_reference_file, particle):
         if (line == ""):
             print "String '%s' not found!" % (end_decay_string)
             raise SystemExit(os.EX_DATAERR)
-    
+
     print "string '%s' found at line %i" % (end_decay_string, linenumber_end_decay)
-    
+
     reference_file.seek(0)
     work_reference_file = open('workreffile.tmp','w')
     # somehow the linenumbers are one line off ?
@@ -94,7 +94,7 @@ def extract_decays_from_reference(path_to_reference_file, particle):
                 raise SystemExit(os.EX_SOFTWARE)
             branching_ratio = branching_ratio * (10 ** scale)
             branching_ratio_error = branching_ratio_error * (10 ** scale)
-            
+
             work_reference_file.writelines([str(branching_ratio), " ",
                                             str(branching_ratio_error), " ",
                                             decay_products[0], " ",

@@ -10,7 +10,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     if (extract_decays_from_decay(path_to_decayfile, particle) != 0):
         print "ERROR finding decay in Source File. Exiting"
         raise SystemExit(os.EX_DATAERR)
-    
+
     workfile = utility.open_file_safely("workfile.tmp", 'r')
     referencefile = utility.open_file_safely(path_to_referencefile, 'r')
     generators_set = get_generators()
