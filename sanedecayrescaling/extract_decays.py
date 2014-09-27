@@ -1,5 +1,6 @@
 import os
 import utility
+from xml.dom import minicompat
 def extract_decays_from_decay(path_to_decay_file, particle):
     """get the decays from an EvtGen Decay.Dec file and write them to disk
 
@@ -201,11 +202,30 @@ def make_single_line_snippets(input_lines):
             first_column.pop(1)
         else:
             raise ParseError(input_lines,"string '" + first_column[1] + "should be empty")
-    print first_column
-    print mini_column
-    print second_column
-    print third_column
-    return first_column, second_column 
+    if (len(first_column) == 1):
+        first_column = first_column[0]
+        first_column = first_column.rstrip()
+    else:
+        raise ParseError(input_lines,"the list first_column should only have 1 item, but it currently has " + len(first_column))
+    if (len(second_column) == 1):
+        second_column = second_column[0]
+        second_column = second_column.rstrip()
+    else:
+        raise ParseError(input_lines,"the list second_column should only have 1 item, but it currently has " + len(second_column))
+    if (len(third_column) == 1):
+        third_column = third_column[0]
+    else:
+        raise ParseError(input_lines,"the list third_column should only have 1 item, but it currently has " + len(third_column))
+    
+    while (len(mini_column) > 1):
+        mini_column[0] = mini_column[0] + mini_column[1]
+        mini_column.pop(1)
+    if (len(mini_column) == 1):
+        mini_column = mini_column[0]
+    else:
+        mini_column = ''
+
+    return first_column, second_column, third_column, mini_column
 
     # @TODO: rebuild and return the columns seperately because only the first 
     # contains daughters and only the second contains the branching fraction  
