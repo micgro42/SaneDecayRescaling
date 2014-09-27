@@ -147,8 +147,68 @@ def extract_decay_from_lines(lines):
     return daughters, branching_fraction, branching_fraction_error
 
 
+def make_single_line_snippets(input_lines):
+    """
+    The ascii-refernece file has more or less 3 columns, the first until 40 chars
+    the second column goes to 66, after which comes the last colum, which is
+    irrelevant.
+    The indicator for a multi-line decay is the presence of a '\' char, which
+    signals a linebreak for that column.
+    This first column contains the decay products and and sometimes some other
+    characters, the second column contains the branching fraction
+    """
 
+    lines = input_lines.rstrip("\n")
+    lines = lines.split("\n")
+    first_column = []
+    second_column = []
+    third_column = []
+    mini_column = []
+    for line in lines:
+        if (line[:40] != ''):
+            first_column.append(line[:40])
+        if (line[40:66] != ''):
+            second_column.append(line[40:66])
+        if (line[66:] != ''):
+            third_column.append(line[66:])
 
+    while (first_column[0].find('\\ ') != -1):
+        if (first_column[0].find('[') != -1):
+            mini_column = [first_column[0][first_column[0].find('['):].rstrip('\\ ')]
+            first_column[0] = first_column[0][:first_column[0].find('[')]
+            if (first_column[1].find(']') == -1):
+                mini_column.append(first_column[1][36:].rstrip('\\'))
+                first_column[1] = first_column[1][:36].rstrip()
+                mini_column.append(first_column[2][36:])
+                first_column[2] = first_column[2][:36].rstrip()
+            else:
+                mini_column.append(first_column[1][36:])
+                first_column[1] = first_column[1][:36].rstrip()
+            continue
+        first_column[0] = first_column[0].rstrip("\\ ")
+        first_column[0] = first_column[0] + first_column[1]
+        first_column.pop(1) 
+    while (second_column[0].find('\\ ') != -1):
+        second_column[0] = second_column[0].rstrip("\\ ")
+        second_column[0] = second_column[0] + second_column[1]
+        second_column.pop(1) 
+    while (third_column[0].find('\\ ') != -1):
+        third_column[0] = third_column[0].rstrip("\\ ")
+        third_column[0] = third_column[0] + third_column[1]
+        third_column.pop(1)
+    if (len(first_column) > 1):
+        if (first_column[1] == ''):
+            first_column.pop(1)
+        else:
+            raise ParseError(input_lines,"string '" + first_column[1] + "should be empty")
+    print first_column
+    print mini_column
+    print second_column
+    print third_column
+    return first_column, second_column 
+
+    # @TODO: rebuild and return the columns seperately because only the first 
+    # contains daughters and only the second contains the branching fraction  
 
 
 
