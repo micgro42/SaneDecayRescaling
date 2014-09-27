@@ -158,11 +158,13 @@ def extract_decay_from_lines(lines):
         raise ParseError(lines,"first char in '" + column2 + "' not implemented")
 
     try:
+        branching_fraction = float(branching_fraction)
         branching_fraction_error_plus = float(branching_fraction_error_plus)
         branching_fraction_error_minus = float(branching_fraction_error_minus)
     except ValueError:
         raise ParseError(lines,"failed to parse braching fraction correctly")
     else:
+        branching_fraction = branching_fraction * scale
         branching_fraction_error_plus = branching_fraction_error_plus * scale
         branching_fraction_error_minus = branching_fraction_error_minus * scale
 
