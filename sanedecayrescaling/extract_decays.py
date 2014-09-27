@@ -204,16 +204,17 @@ def make_single_line_snippets(input_lines):
             raise ParseError(input_lines,"string '" + first_column[1] + "should be empty")
     if (len(first_column) == 1):
         first_column = first_column[0]
-        first_column = first_column.rstrip()
+        first_column = first_column.strip()
     else:
         raise ParseError(input_lines,"the list first_column should only have 1 item, but it currently has " + len(first_column))
     if (len(second_column) == 1):
         second_column = second_column[0]
-        second_column = second_column.rstrip()
+        second_column = second_column.strip()
     else:
         raise ParseError(input_lines,"the list second_column should only have 1 item, but it currently has " + len(second_column))
     if (len(third_column) == 1):
         third_column = third_column[0]
+        third_column = third_column.strip()
     else:
         raise ParseError(input_lines,"the list third_column should only have 1 item, but it currently has " + len(third_column))
     

@@ -6,8 +6,8 @@ def test_three_lines_break_both_columns_no_mini():
     line3 = "+)\n"
     column1, column2, column3, column_mini = make_single_line_snippets(line1+line2+line3)
     assert column1 == '......Dbar(2)*(2460)0 lepton+ nu(lepton)   x  B(Dbar(2)*0 --> D*- pi+)'
-    assert column2 == ' (  1.01 +-0.24        )E-3'
-    assert column3 == ' S=2.0 2065'
+    assert column2 == '(  1.01 +-0.24        )E-3'
+    assert column3 == 'S=2.0 2065'
     assert column_mini == ''
 
 
@@ -30,3 +30,11 @@ def test_two_lines_break_first_columns_two_line_mini():
     assert column2 == '<   2.6        E-5'
     assert column3 == 'CL=90%  968'
     assert column_mini == '[vvv]'
+
+def test_one_line_only_no_mini():
+    line1 = "D+ gamma                                ( 1.6+-0.4)%                      136\n"
+    column1, column2, column3, column_mini = make_single_line_snippets(line1)
+    assert column1 == 'D+ gamma'
+    assert column2 == '( 1.6+-0.4)%'
+    assert column3 == '136'
+    assert column_mini == ''
