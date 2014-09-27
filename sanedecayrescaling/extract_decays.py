@@ -1,6 +1,5 @@
 import os
-import utility
-from xml.dom import minicompat
+from utility import *
 def extract_decays_from_decay(path_to_decay_file, particle):
     """get the decays from an EvtGen Decay.Dec file and write them to disk
 
@@ -42,70 +41,64 @@ def extract_decays_from_decay(path_to_decay_file, particle):
 
 def extract_decays_from_reference(path_to_reference_file, particle):
     reference_file = open_file_safely(path_to_reference_file, 'r')
-    stringfound = -1
+    string_found = -1
     linenumber_begin_decay = 0
-    while (stringfound == -1):
+    for line in iter(reference_file.readline, ''):
         linenumber_begin_decay += 1
-        line = reference_file.readline()
-        stringfound=line.find(particle + " DECAY MODES")
+        string_found=line.find(particle + " DECAY MODES")
+        if (string_found != -1):
+            file_position_begin_decay = reference_file.tell()
+            print "string '%s DECAY MODES' found at line %i" % (particle, linenumber_begin_decay)
+            break;
         if (line == ""):
             print "String '%s DECAY MODES' not found!" % (particle)
             raise SystemExit(os.EX_DATAERR)
-    print "string '%s DECAY MODES' found at line %i" % (particle, linenumber_begin_decay)
+    
+    
 
-    stringfound = -1
+    string_found = -1
     linenumber_end_decay = linenumber_begin_decay
     end_decay_string = "==========================================="
-    while (stringfound == -1):
+    for line in iter(reference_file.readline, ''):
         linenumber_end_decay += 1
-        line = reference_file.readline()
-        stringfound=line.find(end_decay_string)
+        string_found=line.find(end_decay_string)
+        if (string_found != -1):
+            print "string '%s' found at line %i" % (end_decay_string, linenumber_end_decay)
+            break;
         if (line == ""):
             print "String '%s' not found!" % (end_decay_string)
             raise SystemExit(os.EX_DATAERR)
 
-    print "string '%s' found at line %i" % (end_decay_string, linenumber_end_decay)
-
-    reference_file.seek(0)
+    
+    decay_length = (linenumber_end_decay -2) - (linenumber_begin_decay + 2)
+    print "decay_length", decay_length
+    reference_file.seek(file_position_begin_decay, 0)
+    reference_file.readline()
+    reference_file.readline()
     work_reference_file = open('workreffile.tmp','w')
-    # somehow the linenumbers are one line off ?
-    for i, line in enumerate(reference_file):
-        if ((i > linenumber_begin_decay + 1) and (i < linenumber_end_decay - 2)):
-            lineparts = line.split()
-            print lineparts
-            scale = -2
-            decay_products = [lineparts[0], lineparts[1]]
-            print "decay products:", decay_products
-            if (lineparts[2]=='('):
-                lineparts.pop(2)
-            branching_ratio = lineparts[2]
-            branching_ratio = branching_ratio.rstrip('%')
-            branching_ratio = branching_ratio.rstrip(')')
-            branching_ratio = branching_ratio.lstrip('(')
-            branching_ratio = branching_ratio.split('+')
-            branching_ratio_error = branching_ratio.pop(-1)
-            branching_ratio = branching_ratio[0]
-            branching_ratio_error = branching_ratio_error.lstrip('-')
-            try:
-                branching_ratio = float(branching_ratio)
-                branching_ratio_error = float(branching_ratio_error)
-            except ValueError:
-                print "recognising branching fraction at line %i failed" % (i)
-                print line
-                raise SystemExit(os.EX_SOFTWARE)
-            branching_ratio = branching_ratio * (10 ** scale)
-            branching_ratio_error = branching_ratio_error * (10 ** scale)
 
-            work_reference_file.writelines([str(branching_ratio), " ",
-                                            str(branching_ratio_error), " ",
-                                            decay_products[0], " ",
-                                            decay_products[1], "\n"])
-#             print "i", i
-#             print linenumber_begin_decay + 1
-#             print linenumber_end_decay - 2
-#             print line
-        if (i > linenumber_end_decay):
-            break
+    for position_in_decay, line in enumerate(iter(reference_file.readline, '')):
+        if (position_in_decay > decay_length - 1):
+            break;
+        decay_lines = line
+        for j in range(0, 2):
+            position_without_readahead = reference_file.tell()
+            next_line = reference_file.readline()
+            try:
+                next_line[77]
+            except IndexError:
+                if (next_line.strip() == ''):
+                    break;
+                decay_lines = decay_lines + next_line
+                position_in_decay += 1
+                continue
+            else:
+                reference_file.seek(position_without_readahead)
+                break;
+        daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decay_from_lines(decay_lines)
+        extracted_line = str(branching_fraction) + ' ' + str(branching_fraction_error_plus) + ' ' + str(branching_fraction_error_minus) + ' ' + ' '.join(daughters) + '\n'
+        work_reference_file.write(extracted_line)
+    
     work_reference_file.close()
     reference_file.close()
 
