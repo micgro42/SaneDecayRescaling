@@ -111,15 +111,19 @@ def extract_decays_from_reference(path_to_reference_file, particle):
 
 
 def extract_decay_from_lines(lines):
+    column1, column2, column3, column_mini = make_single_line_snippets(lines)
     lines = lines.split("\n")
 
 # get scale of numbers
-    if (lines[0].find('%') != -1):
+#TODO: what should this section do for "senn", "not seen" or "large"?
+    if (column2.find('%') != -1):
         scale = 0.01
-    exponent = lines[0].find('E-')
-    if ( exponent != -1):
-        print lines[0][exponent+2]
-        scale = 1 / (10 ** float(lines[0][exponent+2]))
+        column2 = column2.rstrip('%')
+    exponent_position = column2.find('E-')
+    if ( exponent_position != -1):
+        print column2[exponent_position+2]
+        scale = 1 / (10 ** float(column2[exponent_position+2]))
+        column2 = column2[:exponent_position]
 
 # get daughters
     parts = lines[0].split()
@@ -128,24 +132,42 @@ def extract_decay_from_lines(lines):
     while (parts[i][0] != '('):
         daughters.append(parts[i])
         i += 1
+    daughters = column1.split()
 
-# get branching fraction an errors
-    try:
-        parts[i][1]
-    except IndexError:
-        parts.pop(i)
+# get branching fraction and errors
+    if (column2[0] == '('): #default
+        column2 = column2.lstrip('(')
+        column2 = column2.rstrip(')')
+        column2 = column2.strip()
+        branching_fraction = column2.split('+')[0]
+        if (column2.find('+-') != -1):
+            branching_fraction_error_plus = column2.split('-')[1]
+            branching_fraction_error_minus = branching_fraction_error_plus
+        else:
+            branching_fraction_error_plus = column2.split('+')[1]
+            branching_fraction_error_minus = column2.split('-')[1]
+    elif (column2[0] == '<'): #limit
+        pass
+    elif (column2[0] == 's'): #seen
+        pass
+    elif (column2[0] == 'n'): #not seen
+        pass
+    elif (column2[0] == 'l'): #large
+        pass
     else:
-        parts[i] = parts[i].lstrip('(')
+        raise ParseError(lines,"first char in '" + column2 + "' not implemented")
+
     try:
-        branching_fraction = float(parts[i])*scale
+        branching_fraction_error_plus = float(branching_fraction_error_plus)
+        branching_fraction_error_minus = float(branching_fraction_error_minus)
     except ValueError:
-        branching_fraction = float(parts[i].split('+')[0])*scale
+        raise ParseError(lines,"failed to parse braching fraction correctly")
     else:
-        parts.pop(i)
-    parts[i] = parts[i].rstrip('%')
-    parts[i] = parts[i].rstrip(')')
-    branching_fraction_error = float(parts[i].split('-')[1])*scale
-    return daughters, branching_fraction, branching_fraction_error
+        branching_fraction_error_plus = branching_fraction_error_plus * scale
+        branching_fraction_error_minus = branching_fraction_error_minus * scale
+
+
+    return daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus
 
 
 def make_single_line_snippets(input_lines):
