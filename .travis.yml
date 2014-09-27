@@ -10,5 +10,5 @@ install:
 # command to run tests
 script: coverage run --source=sanedecayrescaling setup.py test
 after_success:
-    coveralls
-    coverage report -m
+  - coveralls
+  - coverage report -m
