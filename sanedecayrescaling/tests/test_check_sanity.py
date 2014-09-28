@@ -48,9 +48,9 @@ def fixture_source_reference(request):
 
     reference_file=open('reference.dec.tmp','w')
     reference_file.writelines(["Decay D*+\n",
-                              "0.6770 0.005 D0 pi+\n",
-                              "0.0160 0.004 D+ gamma\n",
-                              "0.3070 0.005 pi0 D+\n",
+                              "0.6770 0.005 0.005 D0 pi+\n",
+                              "0.0160 0.004 0.004 D+ gamma\n",
+                              "0.3070 0.005 0.005 pi0 D+\n",
                               "Enddecay\n","\n"])
     reference_file.close()
 
@@ -68,18 +68,20 @@ def fixture_source_reference(request):
 def test_find_decay_found(fixture_source_reference):
     reference_file = open('reference.dec.tmp')
     decay_list = ["pi+", "D0"]
-    branching_ratio, branching_ratio_error = cs.find_decay_in_reference (
+    branching_ratio, branching_ratio_error_plus, branching_ratio_error_minus = cs.find_decay_in_reference (
                                             reference_file,decay_list)
     assert branching_ratio == 0.6770 # should be the value from the decay file
-    assert branching_ratio_error == 0.005 # "should be the value from the decay file")
+    assert branching_ratio_error_plus == 0.005 # "should be the value from the decay file")
+    assert branching_ratio_error_minus == 0.005 # "should be the value from the decay file")
 
 def test_find_decay_not_found(fixture_source_reference):
     reference_file = open('reference.dec.tmp')
     decay_list = ["pi+", "D+"]
-    branching_ratio, branching_ratio_error = cs.find_decay_in_reference (
+    branching_ratio, branching_ratio_error_plus, branching_ratio_error_minus = cs.find_decay_in_reference (
                                             reference_file,decay_list)
     assert branching_ratio == -1 # should be -1 if decay not found
-    assert branching_ratio_error == -1 # should be -1 if decay not found
+    assert branching_ratio_error_plus == -1 # should be -1 if decay not found
+    assert branching_ratio_error_minus == -1 # should be -1 if decay not found
 
 
 def test_check_sanity_ok(fixture_source_reference):
