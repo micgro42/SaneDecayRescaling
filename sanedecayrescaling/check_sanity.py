@@ -42,15 +42,15 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
             parts.append(second_last_element)
 
 
-            reference_branching_ratio, reference_branching_ratio_error = find_decay_in_reference(referencefile, parts)
+            reference_branching_ratio, reference_branching_ratio_error_plus, reference_branching_ratio_error_minus = find_decay_in_reference(referencefile, parts)
             if (reference_branching_ratio == -1):
                 print "Warning: Decay ", particle, "to", parts, "not found"
             elif (reference_branching_ratio != branching_ratio):
                 print "Warning: Decay ", particle, "to", parts, " has a different branching ratios in source and reference file"
                 print "source file branching ratio: %f" % (branching_ratio)
-                print "reference file branching ratio: %f +- %f" % (reference_branching_ratio, reference_branching_ratio_error)
-                print "deviation %f sigma" % (abs((reference_branching_ratio-branching_ratio)/reference_branching_ratio_error))
-
+                print "reference file branching ratio: %f +- %f" % (reference_branching_ratio, reference_branching_ratio_error_plus)
+                print "deviation %f sigma" % (abs((reference_branching_ratio-branching_ratio)/reference_branching_ratio_error_plus))
+                #TODO: deviation should be shown relative to the approbiate error
     workfile.close()
     referencefile.close()
     return 0
@@ -100,10 +100,12 @@ def find_decay_in_reference(referencefile, decay_list):
             continue
         parts = line.split()
         try:
-            BR = parts.pop(0)
-            BR = float(BR)
-            BRE = parts.pop(0)
-            BRE = float(BRE)
+            branching_ratio = parts.pop(0)
+            branching_ratio = float(branching_ratio)
+            branching_ratio_error_plus = parts.pop(0)
+            branching_ratio_error_plus = float(branching_ratio_error_plus)
+            branching_ratio_error_minus = parts.pop(0)
+            branching_ratio_error_minus = float(branching_ratio_error_minus)
         except ValueError:
             pass
         else:
@@ -113,7 +115,7 @@ def find_decay_in_reference(referencefile, decay_list):
                 decay_found = True
                 break
     if (decay_found):
-        return BR, BRE
+        return branching_ratio, branching_ratio_error_plus, branching_ratio_error_minus
     else:
         return -1, -1
 
