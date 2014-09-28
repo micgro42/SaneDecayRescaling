@@ -117,7 +117,7 @@ def find_decay_in_reference(referencefile, decay_list):
     if (decay_found):
         return branching_ratio, branching_ratio_error_plus, branching_ratio_error_minus
     else:
-        return -1, -1
+        return -1, -1, -1
 
 
 
