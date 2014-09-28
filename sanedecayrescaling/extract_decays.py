@@ -250,8 +250,6 @@ def make_single_line_snippets(input_lines):
 
     return first_column, second_column, third_column, mini_column
 
-    # @TODO: rebuild and return the columns seperately because only the first 
-    # contains daughters and only the second contains the branching fraction  
 
 
 
