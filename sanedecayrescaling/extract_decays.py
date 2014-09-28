@@ -53,8 +53,8 @@ def extract_decays_from_reference(path_to_reference_file, particle):
         if (line == ""):
             print "String '%s DECAY MODES' not found!" % (particle)
             raise SystemExit(os.EX_DATAERR)
-    
-    
+
+
 
     string_found = -1
     linenumber_end_decay = linenumber_begin_decay
@@ -76,7 +76,7 @@ def extract_decays_from_reference(path_to_reference_file, particle):
     reference_file.readline()
     reference_file.readline()
     work_reference_file = open('workreffile.tmp','w')
-
+    work_reference_file.write("Decay " + particle +"\n")
     for position_in_decay, line in enumerate(iter(reference_file.readline, '')):
         if (position_in_decay > decay_length - 1):
             break;
@@ -98,7 +98,8 @@ def extract_decays_from_reference(path_to_reference_file, particle):
         daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decay_from_lines(decay_lines)
         extracted_line = str(branching_fraction) + ' ' + str(branching_fraction_error_plus) + ' ' + str(branching_fraction_error_minus) + ' ' + ' '.join(daughters) + '\n'
         work_reference_file.write(extracted_line)
-    
+
+    work_reference_file.write('Enddecay\n')
     work_reference_file.close()
     reference_file.close()
 
