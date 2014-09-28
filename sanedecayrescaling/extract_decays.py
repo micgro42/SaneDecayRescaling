@@ -40,6 +40,10 @@ def extract_decays_from_decay(path_to_decay_file, particle):
     return 0
 
 def extract_decays_from_reference(path_to_reference_file, particle):
+    """
+    :return: nothing
+    :create: file workreffile.tmp
+    """
     reference_file = open_file_safely(path_to_reference_file, 'r')
     string_found = -1
     linenumber_begin_decay = 0
@@ -50,9 +54,9 @@ def extract_decays_from_reference(path_to_reference_file, particle):
             file_position_begin_decay = reference_file.tell()
             print "string '%s DECAY MODES' found at line %i" % (particle, linenumber_begin_decay)
             break;
-        if (line == ""):
-            print "String '%s DECAY MODES' not found!" % (particle)
-            raise SystemExit(os.EX_DATAERR)
+    if (string_found == -1):
+        print "String '%s DECAY MODES' not found!" % (particle)
+        raise SystemExit(os.EX_DATAERR)
 
 
 
