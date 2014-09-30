@@ -135,12 +135,6 @@ def extract_decay_from_lines(lines):
         column2 = column2[:exponent_position]
 
 # get daughters
-    parts = lines[0].split()
-    daughters = []
-    i = 0
-    while (parts[i][0] != '('):
-        daughters.append(parts[i])
-        i += 1
     daughters = column1.split()
 
 # get branching fraction and errors
