@@ -287,7 +287,7 @@ def make_single_line_snippets(input_lines):
         third_column = third_column.strip()
     else:
         raise ParseError(input_lines,"the list third_column should only have 1 item, but it currently has " + len(third_column))
-    
+
     while (len(mini_column) > 1):
         mini_column[0] = mini_column[0] + mini_column[1]
         mini_column.pop(1)
@@ -295,6 +295,13 @@ def make_single_line_snippets(input_lines):
         mini_column = mini_column[0]
     else:
         mini_column = ''
+
+    flags = set(['L', 'B', 'LF', 'B1'])
+    first_column = first_column.split()
+    while (first_column[-1].strip(',') in flags):
+        mini_column = first_column.pop(-1).strip(',') + " " + mini_column
+    first_column = ' '.join(first_column)
+    mini_column = mini_column.strip()
 
     return first_column, second_column, third_column, mini_column
 
