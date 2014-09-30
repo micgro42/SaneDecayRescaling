@@ -46,6 +46,12 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
             pdg_branching_ratio_error_minus = find_decay_in_reference(referencefile, parts)
             if (pdg_branching_ratio == -1):
                 print "Warning: Decay ", particle, "to", parts, "not found"
+            elif (pdg_branching_ratio_error_plus == 0):
+                print "Warning: Decay ", particle, "to", parts, " is a limit decay"
+                if (branching_ratio > pdg_branching_ratio):
+                    print "branching ratio of ", branching_ratio, " exceeds limit of ", pdg_branching_ratio
+                else:
+                    print "branching ratio of ", branching_ratio, " doesn't exceed limit of ", pdg_branching_ratio 
             elif (pdg_branching_ratio != branching_ratio):
                 print "Warning: Decay ", particle, "to", parts, " has a different branching ratios in source and reference file"
                 print "source file branching ratio: %f" % (branching_ratio)
