@@ -15,6 +15,10 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     referencefile = utility.open_file_safely(path_to_referencefile, 'r')
     generators_set = get_generators()
 
+    number_of_decays_found = 0
+    number_of_decays_not_found = 0
+
+
 
     for i, line in enumerate(workfile):
         if (line == '\n'):
@@ -36,6 +40,8 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
                     raise SystemExit(os.EX_SOFTWARE)
                 last_element = last_element.rstrip(';')
                 generator_found = last_element in generators_set
+            if (last_element == 'PYTHIA'):
+                continue
             second_last_element = parts.pop(-1)
             while (second_last_element in generators_set):
                 second_last_element = parts.pop(-1)
@@ -46,6 +52,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
             pdg_branching_ratio_error_minus = find_decay_in_reference(referencefile, parts)
             if (pdg_branching_ratio == -1):
                 print "Warning: Decay ", particle, "to", parts, "not found"
+                number_of_decays_not_found += 1
             elif (pdg_branching_ratio_error_plus == 0):
                 print "Warning: Decay ", particle, "to", parts, " is a limit decay"
                 if (branching_ratio > pdg_branching_ratio):
@@ -58,6 +65,10 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
                 print "reference file branching ratio: %f +- %f" % (pdg_branching_ratio, pdg_branching_ratio_error_plus)
                 print "deviation %f sigma" % (abs((pdg_branching_ratio-branching_ratio)/pdg_branching_ratio_error_plus))
                 #TODO: deviation should be shown relative to the approbiate error
+            if (pdg_branching_ratio != -1):
+                number_of_decays_found += 1
+    print "number of decays found:", number_of_decays_found
+    print "number of decays not found:", number_of_decays_not_found
     workfile.close()
     referencefile.close()
     return 0
