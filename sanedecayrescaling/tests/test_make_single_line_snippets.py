@@ -65,3 +65,14 @@ def test_two_lines_only_second_column():
     assert column2 == '(  4.3 +- 0.6        )E-3'
     assert column3 == '2308'
     assert column_mini == ''
+
+# B+
+def test_three_lines_all_first_column():
+    line1 = "...Dbar(2)*(2462)0 pi+  x B(Dbar(2\     <   1.7          E-4      CL=90%   --\n"
+    line2 = ")*0 --> Dbar0 pi- pi+ (nonresonant\\\n"
+    line3 = "))\n"
+    column1, column2, column3, column_mini = make_single_line_snippets(line1 + line2 + line3)
+    assert column1 == '...Dbar(2)*(2462)0 pi+  x B(Dbar(2)*0 --> Dbar0 pi- pi+ (nonresonant))'
+    assert column2 == '<   1.7          E-4'
+    assert column3 == 'CL=90%   --'
+    assert column_mini == ''

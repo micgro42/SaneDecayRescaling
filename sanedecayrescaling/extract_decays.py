@@ -207,7 +207,7 @@ def make_single_line_snippets(input_lines):
         if (line[66:] != ''):
             third_column.append(line[66:])
 
-    while (first_column[0].find('\\ ') != -1):
+    while (first_column[0].find('\\') != -1):
         if (first_column[0].find('[') != -1):
             mini_column = [first_column[0][first_column[0].find('['):].rstrip('\\ ')]
             first_column[0] = first_column[0][:first_column[0].find('[')]
@@ -222,7 +222,7 @@ def make_single_line_snippets(input_lines):
                 mini_column.append(first_column[1][36:])
                 first_column[1] = first_column[1][:36].rstrip()
             continue
-        first_column[0] = first_column[0].rstrip("\\ ")
+        first_column[0] = first_column[0].strip().rstrip("\\")
         first_column[0] = first_column[0] + first_column[1]
         first_column.pop(1) 
     while (second_column[0].find('\\ ') != -1):
