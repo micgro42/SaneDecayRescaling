@@ -120,6 +120,9 @@ def extract_decays_from_reference(path_to_reference_file, particle):
 
 
 def extract_decay_from_lines(lines):
+    """
+    Return 0 errors for limit cases
+    """
     column1, column2, column3, column_mini = make_single_line_snippets(lines)
     lines = lines.split("\n")
 
@@ -150,7 +153,11 @@ def extract_decay_from_lines(lines):
             branching_fraction_error_plus = column2.split('+')[1]
             branching_fraction_error_minus = column2.split('-')[1]
     elif (column2[0] == '<'): #limit
-        pass
+        column2 = column2.lstrip('<')
+        column2 = column2.strip()
+        branching_fraction = column2
+        branching_fraction_error_plus = 0
+        branching_fraction_error_minus = 0
     elif (column2[0] == 's'): #seen
         pass
     elif (column2[0] == 'n'): #not seen
