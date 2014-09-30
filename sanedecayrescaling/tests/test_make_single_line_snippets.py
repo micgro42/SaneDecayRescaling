@@ -76,3 +76,12 @@ def test_three_lines_all_first_column():
     assert column2 == '<   1.7          E-4'
     assert column3 == 'CL=90%   --'
     assert column_mini == ''
+
+# B+
+def test_one_line_single_letter_in_mini():
+    line1 = "D- e+ mu+                        L      <   1.8          E-6      CL=90% 2307\n"
+    column1, column2, column3, column_mini = make_single_line_snippets(line1)
+    assert column1 == 'D- e+ mu+'
+    assert column2 == '<   1.8          E-6'
+    assert column3 == 'CL=90% 2307'
+    assert column_mini == 'L'
