@@ -42,14 +42,15 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
             parts.append(second_last_element)
 
 
-            reference_branching_ratio, reference_branching_ratio_error_plus, reference_branching_ratio_error_minus = find_decay_in_reference(referencefile, parts)
-            if (reference_branching_ratio == -1):
+            pdg_branching_ratio, pdg_branching_ratio_error_plus, \
+            pdg_branching_ratio_error_minus = find_decay_in_reference(referencefile, parts)
+            if (pdg_branching_ratio == -1):
                 print "Warning: Decay ", particle, "to", parts, "not found"
-            elif (reference_branching_ratio != branching_ratio):
+            elif (pdg_branching_ratio != branching_ratio):
                 print "Warning: Decay ", particle, "to", parts, " has a different branching ratios in source and reference file"
                 print "source file branching ratio: %f" % (branching_ratio)
-                print "reference file branching ratio: %f +- %f" % (reference_branching_ratio, reference_branching_ratio_error_plus)
-                print "deviation %f sigma" % (abs((reference_branching_ratio-branching_ratio)/reference_branching_ratio_error_plus))
+                print "reference file branching ratio: %f +- %f" % (pdg_branching_ratio, pdg_branching_ratio_error_plus)
+                print "deviation %f sigma" % (abs((pdg_branching_ratio-branching_ratio)/pdg_branching_ratio_error_plus))
                 #TODO: deviation should be shown relative to the approbiate error
     workfile.close()
     referencefile.close()
