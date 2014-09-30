@@ -241,16 +241,29 @@ def make_single_line_snippets(input_lines):
             continue
         first_column[0] = first_column[0].strip().rstrip("\\")
         first_column[0] = first_column[0] + first_column[1]
-        first_column.pop(1) 
-    while (second_column[0].find('\\ ') != -1):
-        second_column[0] = second_column[0].rstrip("\\ ")
-        second_column[0] = second_column[0] + second_column[1]
-        second_column.pop(1)
-    if (len(third_column) >= 1):
+        first_column.pop(1)
+
+    try:
+        second_column[0].find('\\ ')
+    except IndexError:
+        print "IndexError in the following", lines
+        raise
+    else:
+        while (second_column[0].find('\\ ') != -1):
+            second_column[0] = second_column[0].rstrip("\\ ")
+            second_column[0] = second_column[0] + second_column[1]
+            second_column.pop(1)
+    try:
+        third_column[0].find('\\ ')
+    except IndexError:
+        print "IndexError in the following", lines
+        raise
+    else:
         while (third_column[0].find('\\ ') != -1):
             third_column[0] = third_column[0].rstrip("\\ ")
             third_column[0] = third_column[0] + third_column[1]
             third_column.pop(1)
+
     if (len(first_column) > 1):
         if (first_column[1] == ''):
             first_column.pop(1)
