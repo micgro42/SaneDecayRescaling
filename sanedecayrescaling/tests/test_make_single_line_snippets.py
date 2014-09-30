@@ -106,3 +106,27 @@ def test_3_lines_1letter_4q_in_mini():
     assert column2 == '(  1.29 +-0.21        )E-6'
     assert column3 == '2564'
     assert column_mini == 'B1 [qqqq]'
+
+
+#B+
+# currently the following cases are skipped in the code, therefore they are not
+# to be tested
+# def test_3_lines_square_bracket_first_column_4s_in_mini():
+#     line1 = "[ K- pi+ ](D) K+                    [s\ <   2.8          E-7      CL=90%   --\n"
+#     line2 = "                                    ss\\\n"
+#     line3 = "                                    s]\n"
+#     column1, column2, column3, column_mini = make_single_line_snippets(line1 + line2 + line3)
+#     assert column1 == ''
+#     assert column2 == '<   2.8          E-7'
+#     assert column3 == 'CL=90%   --'
+#     assert column_mini == ''
+# 
+# 
+# def test_3_lines_square_bracket_first_column_no_mini():
+#     line1 = "[ K+ pi- ](D) pi+                        (  2.0  +-0.4         )\          --\n"
+#     line2 = "                                        E-4\n"
+#     column1, column2, column3, column_mini = make_single_line_snippets(line1 + line2 + line3)
+#     assert column1 == ''
+#     assert column2 == '(  2.0  +-0.4         )E-4'
+#     assert column3 == '--'
+#     assert column_mini == ''
