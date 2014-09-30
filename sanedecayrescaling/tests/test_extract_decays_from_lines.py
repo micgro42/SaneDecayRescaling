@@ -45,3 +45,12 @@ def test_normal_E3_one_line_some_spaces(relative_tolerance):
     #assert branching_fraction_error == 0.00018
     numpy.testing.assert_allclose(branching_fraction_error_plus, 0.00018, relative_tolerance)
     numpy.testing.assert_allclose(branching_fraction_error_minus, 0.00018, relative_tolerance)
+
+# B0
+def test_limit():
+    line1 = "D+ X                                    <   3.9         %         CL=90%   --\n"
+    daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decays.extract_decay_from_lines(line1)
+    assert daughters == ["D+", "X"]
+    assert branching_fraction == 0.039
+    assert branching_fraction_error_plus == 0.00
+    assert branching_fraction_error_minus == 0.00
