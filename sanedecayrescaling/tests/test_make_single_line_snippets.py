@@ -55,3 +55,13 @@ def test_three_lines_only_three_mini():
     assert column2 == '( 10.33+- 0.28       )%'
     assert column3 == '--'
     assert column_mini == '[qqqq]'
+
+#B0
+def test_two_lines_only_second_column():
+    line1 = "...Dbar0 pi- lepton+ nu(lepton)          (  4.3 +- 0.6        )E\        2308\n"
+    line2 = "                                        -3"
+    column1, column2, column3, column_mini = make_single_line_snippets(line1 + line2)
+    assert column1 == '...Dbar0 pi- lepton+ nu(lepton)'
+    assert column2 == '(  4.3 +- 0.6        )E-3'
+    assert column3 == '2308'
+    assert column_mini == ''
