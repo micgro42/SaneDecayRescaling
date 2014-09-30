@@ -265,6 +265,7 @@ def make_single_line_snippets(input_lines):
             third_column.pop(1)
 
     if (len(first_column) > 1):
+        first_column[1] = first_column[1].strip()
         if (first_column[1] == ''):
             first_column.pop(1)
         else:
