@@ -88,7 +88,7 @@ def extract_decays_from_reference(path_to_reference_file, particle):
     position_in_decay = 0
     for line in iter(reference_file.readline, ''):
         position_in_decay += 1
-        if (position_in_decay > decay_length - 1):
+        if (position_in_decay > decay_length ):
             break;
         if (line == '\n'):
             continue

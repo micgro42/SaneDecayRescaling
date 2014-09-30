@@ -124,7 +124,7 @@ def test_extract_decays_from_reference(fixture_source):
     extract_decays_from_reference('reference_file.tmp','D*(2010)+-')
     reference_file = open('workreffile.tmp','r')
     reference_file_lines = reference_file.readlines()
-    assert reference_file_lines[0] == 'Decay D*(2010)+-\n'
+    assert reference_file_lines[0] == 'Decay D*+-\n'
     assert reference_file_lines[1] == '0.677 0.005 0.005 D0 pi+\n'
     assert reference_file_lines[2] == '0.307 0.005 0.005 D+ pi0\n'
     assert reference_file_lines[3] == '0.016 0.004 0.004 D+ gamma\n'
