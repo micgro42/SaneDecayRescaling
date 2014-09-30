@@ -1,4 +1,5 @@
 from sanedecayrescaling.extract_decays import make_single_line_snippets
+from sanedecayrescaling.utility import *
 
 def test_three_lines_break_both_columns_no_mini():
     line1 = "......Dbar(2)*(2460)0 lepton+ nu(l\      (  1.01 +-0.24        )\  S=2.0 2065\n"
@@ -38,3 +39,19 @@ def test_one_line_only_no_mini():
     assert column2 == '( 1.6+-0.4)%'
     assert column3 == '136'
     assert column_mini == ''
+
+# B0
+def test_three_lines_only_three_mini():
+    line1 = "lepton+ nu(lepton) anything         [q\  ( 10.33+- 0.28       )%           --\n"
+    line2 = "                                    qq\\\n"
+    line3 = "                                    q]\n"
+    try:
+        column1, column2, column3, column_mini = make_single_line_snippets(line1 + line2 + line3)
+    except ParseError as e:
+        print e.msg
+        print e.line
+        raise
+    assert column1 == 'lepton+ nu(lepton) anything'
+    assert column2 == '( 10.33+- 0.28       )%'
+    assert column3 == '--'
+    assert column_mini == '[qqqq]'

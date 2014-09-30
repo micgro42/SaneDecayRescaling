@@ -221,11 +221,12 @@ def make_single_line_snippets(input_lines):
     while (second_column[0].find('\\ ') != -1):
         second_column[0] = second_column[0].rstrip("\\ ")
         second_column[0] = second_column[0] + second_column[1]
-        second_column.pop(1) 
-    while (third_column[0].find('\\ ') != -1):
-        third_column[0] = third_column[0].rstrip("\\ ")
-        third_column[0] = third_column[0] + third_column[1]
-        third_column.pop(1)
+        second_column.pop(1)
+    if (len(third_column) >= 1):
+        while (third_column[0].find('\\ ') != -1):
+            third_column[0] = third_column[0].rstrip("\\ ")
+            third_column[0] = third_column[0] + third_column[1]
+            third_column.pop(1)
     if (len(first_column) > 1):
         if (first_column[1] == ''):
             first_column.pop(1)
