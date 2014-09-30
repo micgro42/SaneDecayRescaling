@@ -229,7 +229,7 @@ def make_single_line_snippets(input_lines):
             mini_column = [first_column[0][first_column[0].find('['):].rstrip('\\ ')]
             first_column[0] = first_column[0][:first_column[0].find('[')]
             if (first_column[1].find(']') == -1):
-                mini_column.append(first_column[1][36:].rstrip('\\'))
+                mini_column.append(first_column[1][36:].strip().rstrip('\\'))
                 first_column[1] = first_column[1][:36].rstrip()
                 mini_column.append(first_column[2][36:])
                 first_column[2] = first_column[2][:36].rstrip()
