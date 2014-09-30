@@ -85,7 +85,9 @@ def extract_decays_from_reference(path_to_reference_file, particle):
 
     work_reference_file = open('workreffile.tmp','w')
     work_reference_file.write("Decay " + t.translate_pdg_to_evtgen(particle) +"\n")
-    for position_in_decay, line in enumerate(iter(reference_file.readline, '')):
+    position_in_decay = 0
+    for line in iter(reference_file.readline, ''):
+        position_in_decay += 1
         if (position_in_decay > decay_length - 1):
             break;
         if (line == '\n'):
@@ -100,6 +102,7 @@ def extract_decays_from_reference(path_to_reference_file, particle):
                 next_line[77]
             except IndexError:
                 if (next_line.strip() == ''):
+                    reference_file.seek(position_without_readahead)
                     break;
                 decay_lines = decay_lines + next_line
                 position_in_decay += 1
