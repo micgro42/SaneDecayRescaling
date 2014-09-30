@@ -88,6 +88,10 @@ def extract_decays_from_reference(path_to_reference_file, particle):
     for position_in_decay, line in enumerate(iter(reference_file.readline, '')):
         if (position_in_decay > decay_length - 1):
             break;
+        if (line == '\n'):
+            continue
+        if (line[0] == ' '):
+            continue
         decay_lines = line
         for j in range(0, 2):
             position_without_readahead = reference_file.tell()
