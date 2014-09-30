@@ -136,7 +136,6 @@ def extract_decay_from_lines(lines):
         column2 = column2.rstrip('%')
     exponent_position = column2.find('E-')
     if ( exponent_position != -1):
-        print column2[exponent_position+2]
         scale = 1 / (10 ** float(column2[exponent_position+2]))
         column2 = column2[:exponent_position]
 
