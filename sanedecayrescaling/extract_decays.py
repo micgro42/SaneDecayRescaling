@@ -94,6 +94,8 @@ def extract_decays_from_reference(path_to_reference_file, particle):
             continue
         if (line[0] == ' '):
             continue
+        if (line[0] == '['):
+            continue # TODO: Confirm that this is actually correct behavior
         decay_lines = line
         for j in range(0, 2):
             position_without_readahead = reference_file.tell()
