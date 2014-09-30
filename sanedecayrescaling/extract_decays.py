@@ -110,8 +110,20 @@ def extract_decays_from_reference(path_to_reference_file, particle):
             else:
                 reference_file.seek(position_without_readahead)
                 break;
-        
-        daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decay_from_lines(decay_lines)
+
+        try:
+            daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decay_from_lines(decay_lines)
+        except (IndexError) as e:
+            print "IndexError in line", linenumber_begin_decay + position_in_decay + 2
+            raise
+        except (ParseError) as e:
+            print "ParseError in line", linenumber_begin_decay + position_in_decay + 2
+            print e.msg
+            print e.line
+            raise
+        except:
+            print "Error in line", linenumber_begin_decay + position_in_decay + 2
+            raise
         for i, daughter_in_decay in enumerate(daughters):
             daughters[i] = t.translate_pdg_to_evtgen(daughter_in_decay)
         extracted_line = str(branching_fraction) + ' ' + str(branching_fraction_error_plus) + ' ' + str(branching_fraction_error_minus) + ' ' + ' '.join(daughters) + '\n'
@@ -174,6 +186,9 @@ def extract_decay_from_lines(lines):
         branching_fraction_error_plus = float(branching_fraction_error_plus)
         branching_fraction_error_minus = float(branching_fraction_error_minus)
     except ValueError:
+        print "branching_fraction:", branching_fraction
+        print "branching_fraction_error_plus:", branching_fraction_error_plus
+        print "branching_fraction_error_minus:", branching_fraction_error_minus
         raise ParseError(lines,"failed to parse braching fraction correctly")
     else:
         branching_fraction = branching_fraction * scale
