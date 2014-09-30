@@ -150,7 +150,7 @@ def extract_decay_from_lines(lines):
             branching_fraction_error_plus = column2.split('-')[1]
             branching_fraction_error_minus = branching_fraction_error_plus
         else:
-            branching_fraction_error_plus = column2.split('+')[1]
+            branching_fraction_error_plus = column2.split('+')[1].split('-')[0]
             branching_fraction_error_minus = column2.split('-')[1]
     elif (column2[0] == '<'): #limit
         column2 = column2.lstrip('<')

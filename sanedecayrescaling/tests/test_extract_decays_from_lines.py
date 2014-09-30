@@ -56,10 +56,10 @@ def test_limit():
     assert branching_fraction_error_minus == 0.00
 
 # B0
-def test_separate_errors():
+def test_separate_errors(relative_tolerance):
     line1 = "D(s)+ X                                  ( 10.3 +  2.1  - 1.8 )%           --\n"
     daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decays.extract_decay_from_lines(line1)
     assert daughters == ["D(s)+", "X"]
-    assert branching_fraction == 0.103
+    numpy.testing.assert_allclose(branching_fraction, 0.103, relative_tolerance)
     assert branching_fraction_error_plus == 0.021
-    assert branching_fraction_error_minus == 0.018
+    numpy.testing.assert_allclose(branching_fraction_error_minus, 0.018, relative_tolerance)
