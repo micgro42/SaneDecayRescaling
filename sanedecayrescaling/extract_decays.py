@@ -1,5 +1,6 @@
 import os
 from utility import *
+from translate_particles import *
 def extract_decays_from_decay(path_to_decay_file, particle):
     """get the decays from an EvtGen Decay.Dec file and write them to disk
 
@@ -44,6 +45,8 @@ def extract_decays_from_reference(path_to_reference_file, particle):
     :return: nothing
     :create: file workreffile.tmp
     """
+    t = hep_translator()
+    particle = t.translate_evtgen_to_pdg(particle)
     reference_file = open_file_safely(path_to_reference_file, 'r')
     string_found = -1
     linenumber_begin_decay = 0
@@ -79,8 +82,9 @@ def extract_decays_from_reference(path_to_reference_file, particle):
     reference_file.seek(file_position_begin_decay, 0)
     reference_file.readline()
     reference_file.readline()
+
     work_reference_file = open('workreffile.tmp','w')
-    work_reference_file.write("Decay " + particle +"\n")
+    work_reference_file.write("Decay " + t.translate_pdg_to_evtgen(particle) +"\n")
     for position_in_decay, line in enumerate(iter(reference_file.readline, '')):
         if (position_in_decay > decay_length - 1):
             break;
@@ -99,7 +103,10 @@ def extract_decays_from_reference(path_to_reference_file, particle):
             else:
                 reference_file.seek(position_without_readahead)
                 break;
+        
         daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decay_from_lines(decay_lines)
+        for i, daughter_in_decay in enumerate(daughters):
+            daughters[i] = t.translate_pdg_to_evtgen(daughter_in_decay)
         extracted_line = str(branching_fraction) + ' ' + str(branching_fraction_error_plus) + ' ' + str(branching_fraction_error_minus) + ' ' + ' '.join(daughters) + '\n'
         work_reference_file.write(extracted_line)
 
