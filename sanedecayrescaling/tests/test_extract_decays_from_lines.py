@@ -63,3 +63,12 @@ def test_separate_errors(relative_tolerance):
     numpy.testing.assert_allclose(branching_fraction, 0.103, relative_tolerance)
     assert branching_fraction_error_plus == 0.021
     numpy.testing.assert_allclose(branching_fraction_error_minus, 0.018, relative_tolerance)
+
+# B+
+def test_single_letter_in_mini():
+    line1 = "D- e+ mu+                        L      <   1.8          E-6      CL=90% 2307\n"
+    daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decays.extract_decay_from_lines(line1)
+    assert daughters == ["D-", "e+","mu+"]
+    assert branching_fraction == 0.0000018
+    assert branching_fraction_error_plus == 0.00
+    assert branching_fraction_error_minus == 0.00
