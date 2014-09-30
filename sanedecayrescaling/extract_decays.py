@@ -211,6 +211,8 @@ def make_single_line_snippets(input_lines):
                 first_column[1] = first_column[1][:36].rstrip()
                 mini_column.append(first_column[2][36:])
                 first_column[2] = first_column[2][:36].rstrip()
+                if (first_column[2] == ''):
+                    first_column.pop(2)
             else:
                 mini_column.append(first_column[1][36:])
                 first_column[1] = first_column[1][:36].rstrip()
