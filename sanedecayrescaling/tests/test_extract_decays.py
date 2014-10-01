@@ -162,7 +162,7 @@ def test_extract_decays_from_reference_missing_blank_line():
     assert work_ref_file_lines[0] == 'Decay D+\n'
     assert work_ref_file_lines[1] == "0.00022 5e-05 5e-05 eta'(958) e+ nu_e\n"
     assert work_ref_file_lines[2] == "9e-05 0.0 0.0 phi e+ nu_e\n"
-    assert work_ref_file_lines[3] == "0.0552 0.0015 0.0015 Kbar*(892)0 e+ nu_e\n"
+    assert work_ref_file_lines[3] == "0.0552 0.0015 0.0015 anti-K*0 e+ nu_e\n"
     assert work_ref_file_lines[4] == "Enddecay\n"
 
 

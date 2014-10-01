@@ -9,6 +9,7 @@ class hep_translator:
             'nubar(tau)': 'anti-nu_tau',
             'Kbar0': 'anti-K0',
             'Kbar*0': 'anti-K*0',
+            'Kbar*(892)0': 'anti-K*0',
             'K(S)0': 'K_S0',
             'K(L)0': 'K_L0',
             'K*(892)+': 'K*+',
