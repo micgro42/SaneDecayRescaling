@@ -25,6 +25,7 @@ class hep_translator:
             'D(s)+': 'D_s+',
             'D(s)*-': 'D_s-',
             'D(s)*+': 'D_s*+',
+            "eta'(958)": "eta'",
             'eta(c)': 'eta_c',
             'J/psi(1S)': 'J/psi',
             'p': 'p+',
