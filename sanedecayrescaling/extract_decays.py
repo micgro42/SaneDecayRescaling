@@ -158,6 +158,13 @@ def extract_decay_from_lines(lines):
     while (column1[0] == '.'):
         column1 = column1[1:]
     daughters = column1.split()
+    for index,daughter in enumerate(daughters):
+        if (daughter[0].isdigit()):
+            mutliplicity = int(daughter[0])
+            daughter = daughter[1:]
+            daughters[index] = daughter
+            for i in range(1, mutliplicity):
+                daughters.insert(index, daughter)
 
 # get branching fraction and errors
     if (column2[0] == '('): #default

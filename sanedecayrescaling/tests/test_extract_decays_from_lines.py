@@ -91,3 +91,11 @@ def test_remove_dots(relative_tolerance):
     numpy.testing.assert_allclose(branching_fraction_error_plus, 0.00015, relative_tolerance)
     numpy.testing.assert_allclose(branching_fraction_error_minus, 0.00015, relative_tolerance)
 
+# D+
+def test_daughter_with_multiplicity(relative_tolerance):
+    line1 = "2pi+ pi-                                 ( 3.18+-0.18      )E-3           909\n"
+    daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decays.extract_decay_from_lines(line1)
+    assert daughters == ['pi+', 'pi+', 'pi-']
+    assert branching_fraction == 0.00318
+    numpy.testing.assert_allclose(branching_fraction_error_plus, 0.00018, relative_tolerance)
+    numpy.testing.assert_allclose(branching_fraction_error_minus, 0.00018, relative_tolerance)
