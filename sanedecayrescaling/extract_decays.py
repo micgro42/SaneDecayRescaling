@@ -178,7 +178,10 @@ def extract_decay_from_lines(lines):
     elif (column2[0] == 's'): #seen
         pass
     elif (column2[0] == 'n'): #not seen
-        pass
+        branching_fraction = 0
+        branching_fraction_error_plus = 0
+        branching_fraction_error_minus = 0
+        scale = 0
     elif (column2[0] == 'l'): #large
         pass
     else:

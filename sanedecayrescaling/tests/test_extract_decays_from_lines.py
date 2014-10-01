@@ -72,3 +72,12 @@ def test_single_letter_in_mini():
     assert branching_fraction == 0.0000018
     assert branching_fraction_error_plus == 0.00
     assert branching_fraction_error_minus == 0.00
+
+# invented
+def test_not_seen():
+    line1 = "K- pi0                                  not seen                        381\n"
+    daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decays.extract_decay_from_lines(line1)
+    assert daughters == ["K-", "pi0"]
+    assert branching_fraction == 0.0
+    assert branching_fraction_error_plus == 0.00
+    assert branching_fraction_error_minus == 0.00
