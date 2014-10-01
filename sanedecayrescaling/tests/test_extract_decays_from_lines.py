@@ -81,3 +81,13 @@ def test_not_seen():
     assert branching_fraction == 0.0
     assert branching_fraction_error_plus == 0.00
     assert branching_fraction_error_minus == 0.00
+
+# D+
+def test_remove_dots(relative_tolerance):
+    line1 = "...rho0 pi+                              ( 8.1 +-1.5       )E-4           767\n"
+    daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decays.extract_decay_from_lines(line1)
+    assert daughters == ["rho0", "pi+"]
+    assert branching_fraction == 0.00081
+    numpy.testing.assert_allclose(branching_fraction_error_plus, 0.00015, relative_tolerance)
+    numpy.testing.assert_allclose(branching_fraction_error_minus, 0.00015, relative_tolerance)
+

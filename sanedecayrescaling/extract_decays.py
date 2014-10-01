@@ -155,6 +155,8 @@ def extract_decay_from_lines(lines):
         column2 = column2[:exponent_position]
 
 # get daughters
+    while (column1[0] == '.'):
+        column1 = column1[1:]
     daughters = column1.split()
 
 # get branching fraction and errors
