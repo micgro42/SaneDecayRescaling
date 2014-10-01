@@ -311,7 +311,7 @@ def make_single_line_snippets(input_lines):
     else:
         mini_column = ''
 
-    flags = set(['L', 'B', 'LF', 'B1'])
+    flags = set(['L', 'B', 'LF', 'B1', 'C1'])
     first_column = first_column.split()
     while (first_column[-1].strip(',') in flags):
         mini_column = first_column.pop(-1).strip(',') + " " + mini_column
