@@ -42,8 +42,13 @@ def extract_decays_from_decay(path_to_decay_file, particle):
 
 def extract_decays_from_reference(path_to_reference_file, particle):
     """
-    :return: nothing
-    :create: file workreffile.tmp
+    Extracts decay of particle from reference file 
+    
+    returns:
+        nothing
+    
+    create:
+        file workreffile.tmp
     """
     t = hep_translator()
     particle = t.translate_evtgen_to_pdg(particle)

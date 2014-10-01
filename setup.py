@@ -23,7 +23,7 @@ class PyTest(TestCommand):
 config = {
     'name': 'SaneDecayRescaling',
     'description': 'My Project',
-    'author': 'Michael Gro√üe',
+    'author': 'Michael Groﬂe',
     'url': 'https://github.com/micgro42/SaneDecayRescaling',
     'download_url': 'https://github.com/micgro42/SaneDecayRescaling',
     'author_email': 'micgro42@physik.hu-berlin.de',
