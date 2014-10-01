@@ -30,6 +30,8 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
         except ValueError:
             pass
         else:
+            if (branching_ratio == 0.0):
+                continue
             generator_found = False
             while (not generator_found):
                 try:
