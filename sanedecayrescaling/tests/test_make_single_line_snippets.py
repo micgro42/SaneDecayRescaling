@@ -107,6 +107,15 @@ def test_3_lines_1letter_4q_in_mini():
     assert column3 == '2564'
     assert column_mini == 'B1 [qqqq]'
 
+# D0
+def test_2_lines_flag_after_1column_line_break():
+    line1 = "K*(892)+ pi- , K*(892)+ --> K(S\\ DC      ( 1.13 +  0.60  - 0.34 \         711\n"
+    line2 = ")0 pi+                                  )E-4\n"
+    column1, column2, column3, column_mini = make_single_line_snippets(line1 + line2)
+    assert column1 == 'K*(892)+ pi- , K*(892)+ --> K(S)0 pi+'
+    assert column2 == '( 1.13 +  0.60  - 0.34)E-4'
+    assert column3 == '711'
+    assert column_mini == 'DC'
 
 #B+
 # currently the following cases are skipped in the code, therefore they are not

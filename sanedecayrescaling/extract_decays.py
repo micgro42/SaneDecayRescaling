@@ -231,8 +231,9 @@ def make_single_line_snippets(input_lines):
             second_column.append(line[40:66])
         if (line[66:] != ''):
             third_column.append(line[66:])
-
+    flag_list = ''
     while (first_column[0].find('\\') != -1):
+        first_column[0], flag_list = remove_flags(first_column[0], flag_list)
         if (first_column[0].find('[') != -1):
             mini_column = [first_column[0][first_column[0].find('['):].rstrip('\\ ')]
             first_column[0] = first_column[0][:first_column[0].find('[')]
@@ -304,21 +305,25 @@ def make_single_line_snippets(input_lines):
     else:
         mini_column = ''
 
-    flags = set(['L', 'B', 'LF', 'B1', 'C1'])
-    first_column = first_column.split()
-    while (first_column[-1].strip(',') in flags):
-        mini_column = first_column.pop(-1).strip(',') + " " + mini_column
-    first_column = ' '.join(first_column)
+    first_column, flag_list = remove_flags(first_column, flag_list)
+    mini_column = flag_list + " " + mini_column
     mini_column = mini_column.strip()
 
     return first_column, second_column, third_column, mini_column
 
 
 
-
-
-
-
+def remove_flags(column, flag_list):
+    """returns the column without the flags at the end, which have been added
+    to the flag list, which is also returned
+    """
+    flags = set(['L', 'B', 'LF', 'B1', 'C1', 'DC'])
+    column = column.split()
+    while (column[-1].strip(',') in flags):
+        flag_list = column.pop(-1).strip(',') + " " + flag_list
+    column = ' '.join(column)
+    flag_list = flag_list.strip()
+    return column, flag_list
 
 
 
