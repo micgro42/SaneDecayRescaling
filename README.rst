@@ -31,7 +31,12 @@ current result of the tests at travis-ci:
 
 .. image:: https://coveralls.io/repos/micgro42/SaneDecayRescaling/badge.png
   :target: https://coveralls.io/r/micgro42/SaneDecayRescaling
+  :align: center
 
 
+.. image:: https://readthedocs.org/projects/sanedecayrescaling/badge/?version=latest
+:target: https://readthedocs.org/projects/sanedecayrescaling/?badge=latest
+:alt: Documentation Status
+:align: center
 
 see also: http://evtgen.warwick.ac.uk/
