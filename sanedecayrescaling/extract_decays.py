@@ -97,21 +97,22 @@ def extract_decays_from_reference(path_to_reference_file, particle):
         if (line[0] == '['):
             continue # TODO: Confirm that this is actually correct behavior
         decay_lines = line
-        for j in range(0, 2):
-            position_without_readahead = reference_file.tell()
-            next_line = reference_file.readline()
-            try:
-                next_line[77]
-            except IndexError:
-                if (next_line.strip() == ''):
+        if (line.find('\\') != -1):
+            for j in range(0, 2):
+                position_without_readahead = reference_file.tell()
+                next_line = reference_file.readline()
+                try:
+                    next_line[77]
+                except IndexError:
+                    if (next_line.strip() == ''):
+                        reference_file.seek(position_without_readahead)
+                        break;
+                    decay_lines = decay_lines + next_line
+                    position_in_decay += 1
+                    continue
+                else:
                     reference_file.seek(position_without_readahead)
                     break;
-                decay_lines = decay_lines + next_line
-                position_in_decay += 1
-                continue
-            else:
-                reference_file.seek(position_without_readahead)
-                break;
 
         try:
             daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decay_from_lines(decay_lines)
