@@ -160,10 +160,43 @@ def test_extract_decays_from_reference_missing_blank_line():
     work_ref_file = open('workreffile.tmp','r')
     work_ref_file_lines = work_ref_file.readlines()
     assert work_ref_file_lines[0] == 'Decay D+\n'
-    assert work_ref_file_lines[1] == "0.00022 5e-05 5e-05 eta'(958) e+ nu_e\n"
+    assert work_ref_file_lines[1] == "0.00022 5e-05 5e-05 eta' e+ nu_e\n"
     assert work_ref_file_lines[2] == "9e-05 0.0 0.0 phi e+ nu_e\n"
     assert work_ref_file_lines[3] == "0.0552 0.0015 0.0015 anti-K*0 e+ nu_e\n"
     assert work_ref_file_lines[4] == "Enddecay\n"
+
+# see D0
+def test_extract_decays_from_reference_two_lines_missing_blank_line():
+    reference_file = open('reference_file.tmp','w');
+    reference_file.writelines([
+"                                                               Scale factor/  p\n", 
+"D+ DECAY MODES                          Fraction (G(i)/G)             CL(MeV\\\n",
+"                                                                        /c)\n", 
+"- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n", 
+" \n",
+"                               Inclusive modes\n",
+" \n",
+"eta'(958) e+ nu(e)                       ( 2.2 +-0.5       )E-4           689\n",
+"K- 3pi+ 2pi-                             ( 2.2  +- 0.6          \         713\n",
+"                                        )E-4\n",
+"      Fractions of many of the following modes with resonances have\n",
+" \n",
+"Kbar*(892)0 e+ nu(e)                     ( 5.52+-0.15      )%             722\n",
+" \n",
+"=============================================================================\n",
+"======\n",
+"| D0 |\n",
+"======\n"])
+    reference_file.close()
+    extract_decays_from_reference('reference_file.tmp','D+')
+    work_ref_file = open('workreffile.tmp','r')
+    work_ref_file_lines = work_ref_file.readlines()
+    assert work_ref_file_lines[0] == 'Decay D+\n'
+    assert work_ref_file_lines[1] == "0.00022 5e-05 5e-05 eta' e+ nu_e\n"
+    assert work_ref_file_lines[2] == "0.00022 6e-05 6e-05 K- pi+ pi+ pi+ pi- pi-\n"
+    assert work_ref_file_lines[3] == "0.0552 0.0015 0.0015 anti-K*0 e+ nu_e\n"
+    assert work_ref_file_lines[4] == "Enddecay\n"
+
 
 
 if __name__ == '__main__':
