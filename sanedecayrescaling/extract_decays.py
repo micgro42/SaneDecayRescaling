@@ -111,6 +111,7 @@ def extract_decays_from_reference(path_to_reference_file, particle):
             daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decay_from_lines(decay_lines)
         except (IndexError) as e:
             print "IndexError in line", linenumber_begin_decay + position_in_decay + 2
+            print decay_lines
             raise
         except (ParseError) as e:
             print "ParseError in line", linenumber_begin_decay + position_in_decay + 2
@@ -178,7 +179,8 @@ def extract_decay_from_lines(lines):
         branching_fraction_error_plus = 0
         branching_fraction_error_minus = 0
     elif (column2[0] == 's'): #seen
-        pass
+        print lines
+        raise ParseError(lines,"seen")
     elif (column2[0] == 'n'): #not seen
         branching_fraction = 0
         branching_fraction_error_plus = 0
