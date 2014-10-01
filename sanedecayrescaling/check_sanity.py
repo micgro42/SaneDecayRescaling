@@ -30,7 +30,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
         except ValueError:
             pass
         else:
-            if (branching_ratio == 0.0):
+            if (branching_ratio == 0.0): # TODO: research what decays are affected by this and if they are relevant
                 continue
             generator_found = False
             while (not generator_found):
@@ -52,7 +52,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
 
             pdg_branching_ratio, pdg_branching_ratio_error_plus, \
             pdg_branching_ratio_error_minus = find_decay_in_reference(referencefile, parts)
-            if (pdg_branching_ratio == -1):
+            if (pdg_branching_ratio == -1): # TODO: replace print with raise warning and write approbiate tests
                 print "Warning: Decay ", particle, "to", parts, "not found"
                 number_of_decays_not_found += 1
             elif (pdg_branching_ratio_error_plus == 0):
