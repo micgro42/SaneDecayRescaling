@@ -216,6 +216,8 @@ def extract_decay_from_lines(lines):
 
 def make_single_line_snippets(input_lines):
     """
+    create and return reconstructed snippets 
+
     The ascii-refernece file has more or less 3 columns, the first until 40 chars
     the second column goes to 66, after which comes the last colum, which is
     irrelevant.
@@ -223,6 +225,12 @@ def make_single_line_snippets(input_lines):
     signals a linebreak for that column.
     This first column contains the decay products and and sometimes some other
     characters, the second column contains the branching fraction
+
+    returns:
+        :first_column: string with the decay products
+        :second_column: string with the branching fractions if existent
+        :third_column: string with phase space, confidence limit and scale
+        :mini_column: flags removed from first column
     """
 
     lines = input_lines.rstrip("\n")
@@ -323,6 +331,10 @@ def make_single_line_snippets(input_lines):
 def remove_flags(column, flag_list):
     """returns the column without the flags at the end, which have been added
     to the flag list, which is also returned
+
+    returns:
+        :column: input column string minus the flags
+        :flag_list: input flag_list string with the flags added in front 
     """
     flags = set(['L', 'B', 'LF', 'B1', 'C1', 'DC', '3-body'])
     column = column.split()
