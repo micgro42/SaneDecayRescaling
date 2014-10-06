@@ -324,7 +324,7 @@ def remove_flags(column, flag_list):
     """returns the column without the flags at the end, which have been added
     to the flag list, which is also returned
     """
-    flags = set(['L', 'B', 'LF', 'B1', 'C1', 'DC'])
+    flags = set(['L', 'B', 'LF', 'B1', 'C1', 'DC', '3-body'])
     column = column.split()
     while (column[-1].strip(',') in flags):
         flag_list = column.pop(-1).strip(',') + " " + flag_list
