@@ -52,21 +52,23 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
 
             pdg_branching_ratio, pdg_branching_ratio_error_plus, \
             pdg_branching_ratio_error_minus = find_decay_in_reference(referencefile, parts)
-            if (pdg_branching_ratio == -1): # TODO: replace print with raise warning and write approbiate tests
+            if (pdg_branching_ratio == -1): # TODO: replace print with raise warning and write appropriate tests
                 print "Warning: Decay ", particle, "to", parts, "not found"
                 number_of_decays_not_found += 1
+            # \TODO: include pdg_branching_ratio == 0 case (not seen)
             elif (pdg_branching_ratio_error_plus == 0):
                 print "Warning: Decay ", particle, "to", parts, " is a limit decay"
                 if (branching_ratio > pdg_branching_ratio):
                     print "branching ratio of ", branching_ratio, " exceeds limit of ", pdg_branching_ratio
                 else:
-                    print "branching ratio of ", branching_ratio, " doesn't exceed limit of ", pdg_branching_ratio 
-            elif (pdg_branching_ratio != branching_ratio):
+                    pass
+#                    print "branching ratio of ", branching_ratio, " doesn't exceed limit of ", pdg_branching_ratio 
+            elif (abs((pdg_branching_ratio-branching_ratio)/pdg_branching_ratio_error_plus) > 1): 
                 print "Warning: Decay ", particle, "to", parts, " has a different branching ratios in source and reference file"
                 print "source file branching ratio: %f" % (branching_ratio)
                 print "reference file branching ratio: %f +- %f" % (pdg_branching_ratio, pdg_branching_ratio_error_plus)
                 print "deviation %f sigma" % (abs((pdg_branching_ratio-branching_ratio)/pdg_branching_ratio_error_plus))
-                #TODO: deviation should be shown relative to the approbiate error
+                #TODO: deviation should be shown relative to the appropriate error
             if (pdg_branching_ratio != -1):
                 number_of_decays_found += 1
     print "number of decays found:", number_of_decays_found
