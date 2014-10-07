@@ -83,6 +83,35 @@ def test_find_decay_not_found(fixture_source_reference):
     assert branching_ratio_error_plus == -1 # should be -1 if decay not found
     assert branching_ratio_error_minus == -1 # should be -1 if decay not found
 
+def test_KL0_found():
+    reference_file=open('reference.dec.tmp','w')
+    reference_file.writelines(["Decay D*+\n",
+                              "0.6770 0.005 0.005 K_S0 pi+\n",
+                              "0.3230 0.003 0.003 K_L0 pi+\n",
+                              "Enddecay\n","\n"])
+    reference_file.close()
+    reference_file = open('reference.dec.tmp')
+    decay_list = ["pi+", "K_L0"]
+    branching_ratio, branching_ratio_error_plus, branching_ratio_error_minus = cs.find_decay_in_reference (
+                                            reference_file,decay_list)
+    assert branching_ratio == 0.3230 # should be 0.6770 since the decay for K_L0 exists
+    assert branching_ratio_error_plus == 0.003 # should be 0.005 since the decay for K_L0 exists
+    assert branching_ratio_error_minus == 0.003 # should be 0.005 since the decay for K_L0 exists
+
+def test_KL0_not_found():
+
+    reference_file=open('reference.dec.tmp','w')
+    reference_file.writelines(["Decay D*+\n",
+                              "0.6770 0.005 0.005 K_S0 pi+\n",
+                              "Enddecay\n","\n"])
+    reference_file.close()
+    reference_file = open('reference.dec.tmp')
+    decay_list = ["pi+", "K_L0"]
+    branching_ratio, branching_ratio_error_plus, branching_ratio_error_minus = cs.find_decay_in_reference (
+                                            reference_file,decay_list)
+    assert branching_ratio == 0.6770 # should be 0.6770 since the decay for K_S0 exists
+    assert branching_ratio_error_plus == 0.005 # should be 0.005 since the decay for K_S0 exists
+    assert branching_ratio_error_minus == 0.005 # should be 0.005 since the decay for K_S0 exists
 
 def test_check_sanity_ok(fixture_source_reference):
     cs.check_sanity('source_decay_file.dec.tmp','reference.dec.tmp','D*+')
