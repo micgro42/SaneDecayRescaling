@@ -168,6 +168,14 @@ def find_decay_in_reference(referencefile, decay_list):
                 break
     if (decay_found):
         return branching_ratio, branching_ratio_error_plus, branching_ratio_error_minus
+    elif ('K_L0' in decay_list):
+        mod_decay_list = []
+        for particle in decay_list:
+            if (particle == 'K_L0'):
+                mod_decay_list.append('K_S0')
+            else:
+                mod_decay_list.append(particle)
+        return find_decay_in_reference(referencefile, mod_decay_list)
     else:
         return -1, -1, -1
 
