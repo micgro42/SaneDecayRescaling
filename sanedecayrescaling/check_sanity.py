@@ -24,6 +24,20 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     evtgen_BR_decays_skipped = 0
     number_of_decays_skipped_0BR = 0
 
+    phi_decays_found = 0
+    br_phi_decays_found = 0
+    phi_decays_not_found = 0
+    br_phi_decays_not_found = 0
+    
+    eta_decays_found = 0
+    br_eta_decays_found = 0
+    eta_decays_not_found = 0
+    br_eta_decays_not_found = 0
+    
+    etap_decays_found = 0
+    br_etap_decays_found = 0
+    etap_decays_not_found = 0
+    br_etap_decays_not_found = 0
 
 
     for i, line in enumerate(workfile):
@@ -83,6 +97,25 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
                 number_of_decays_found += 1
                 pdg_BR_decays_found += pdg_branching_ratio
                 evtgen_BR_decays_found += branching_ratio
+                if ('phi' in parts):
+                    phi_decays_found += 1
+                    br_phi_decays_found += branching_ratio
+                if ('eta' in parts):
+                    eta_decays_found += 1
+                    br_eta_decays_found += branching_ratio
+                if ("eta'" in parts):
+                    etap_decays_found += 1
+                    br_etap_decays_found += branching_ratio
+            else:
+                if ('phi' in parts):
+                    phi_decays_not_found += 1
+                    br_phi_decays_not_found += branching_ratio
+                if ('eta' in parts):
+                    eta_decays_not_found += 1
+                    br_eta_decays_not_found += branching_ratio
+                if ("eta'" in parts):
+                    etap_decays_not_found += 1
+                    br_etap_decays_not_found += branching_ratio
     print "\n"
     print "*****************************"
     print "******** Statistics *********"
@@ -102,7 +135,29 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     print "summed EvtGen branching ratio of the decays skipped:", evtgen_BR_decays_skipped, "\n"
     
     print "sum of the above EvtGen branching ratios:", evtgen_BR_decays_found + evtgen_BR_decays_not_found + evtgen_BR_decays_skipped
-    print "number of decays skipped because the branching ratio is 0:", number_of_decays_skipped_0BR
+    print "number of decays skipped because the branching ratio is 0:", number_of_decays_skipped_0BR, "\n"
+    
+    print "number of phi decays found:", phi_decays_found
+    print "braning ratio of phi decays found:", br_phi_decays_found
+    print "number of phi decays not found:", phi_decays_not_found
+    print "braning ratio of phi decays not found:", br_phi_decays_not_found
+    if (br_phi_decays_found + br_phi_decays_not_found > 0):
+        print "percentage (BR) of phi decays found:", 100*br_phi_decays_found/(br_phi_decays_found + br_phi_decays_not_found), "\n"
+
+    
+    print "number of eta decays found:", eta_decays_found
+    print "braning ratio of eta decays found:", br_eta_decays_found
+    print "number of eta decays not found:", eta_decays_not_found
+    print "braning ratio of eta decays not found:", br_eta_decays_not_found
+    if (br_eta_decays_found + br_eta_decays_not_found > 0):
+        print "percentage (BR) of eta decays found:", 100*br_eta_decays_found/(br_eta_decays_found + br_eta_decays_not_found), "\n"
+    
+    print "number of eta' decays found:", etap_decays_found
+    print "braning ratio of eta' decays found:", br_etap_decays_found
+    print "number of eta' decays not found:", etap_decays_not_found
+    print "braning ratio of eta' decays not found:", br_etap_decays_not_found
+    if (br_etap_decays_found + br_etap_decays_not_found > 0):
+        print "percentage (BR) of eta' decays found:", 100*br_etap_decays_found/(br_etap_decays_found + br_etap_decays_not_found), "\n"
     workfile.close()
     referencefile.close()
     return 0
