@@ -4,7 +4,9 @@ from translate_particles import *
 def extract_decays_from_decay(path_to_decay_file, particle):
     """get the decays from an EvtGen Decay.Dec file and write them to disk
 
-    return is 0 on success, Exception otherwise
+    returns:
+        - 0 on success
+        - Exception otherwise
     """
 
     try:
@@ -43,12 +45,15 @@ def extract_decays_from_decay(path_to_decay_file, particle):
 def extract_decays_from_reference(path_to_reference_file, particle):
     """
     Extracts decay of particle from reference file 
+
+    The functionality to extract the decay of an anti-particle to a particle in 
+    the reference file is not yet implemented.
     
     returns:
-        nothing
-    
-    create:
-        file workreffile.tmp
+        - nothing
+
+    creates:
+        - file workreffile.tmp
     """
     t = hep_translator()
     particle = t.translate_evtgen_to_pdg(particle)
@@ -138,13 +143,20 @@ def extract_decays_from_reference(path_to_reference_file, particle):
 
 def extract_decay_from_lines(lines):
     """
-    Return 0 errors for limit cases
+    parse lines from a decayfile into decay-daughters, branching fraction, errors 
+
+    returns: 
+        - daughters: list of strings
+        - branching_fraction: float
+        - branching_fraction_error_plus, branching_fraction_error_plus: float
+        - 0 errors for limit cases
+        - 0 branching fraction for cases of "not seen"
     """
     column1, column2, column3, column_mini = make_single_line_snippets(lines)
     lines = lines.split("\n")
 
 # get scale of numbers
-#TODO: what should this section do for "senn", "not seen" or "large"?
+#TODO: what should this section do for "seen", "not seen" or "large"?
     if (column2.find('%') != -1):
         scale = 0.01
         column2 = column2.rstrip('%')
@@ -227,10 +239,10 @@ def make_single_line_snippets(input_lines):
     characters, the second column contains the branching fraction
 
     returns:
-        :first_column: string with the decay products
-        :second_column: string with the branching fractions if existent
-        :third_column: string with phase space, confidence limit and scale
-        :mini_column: flags removed from first column
+        - first_column: string with the decay products
+        - second_column: string with the branching fractions if existent
+        - third_column: string with phase space, confidence limit and scale
+        - mini_column: flags removed from first column
     """
 
     lines = input_lines.rstrip("\n")
@@ -333,8 +345,8 @@ def remove_flags(column, flag_list):
     to the flag list, which is also returned
 
     returns:
-        :column: input column string minus the flags
-        :flag_list: input flag_list string with the flags added in front 
+        - column: input column string minus the flags
+        - flag_list: input flag_list string with the flags added in front 
     """
     flags = set(['L', 'B', 'LF', 'B1', 'C1', 'DC', '3-body'])
     column = column.split()

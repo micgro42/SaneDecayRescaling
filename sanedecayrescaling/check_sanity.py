@@ -2,9 +2,14 @@ import os
 from extract_decays import *
 import sanedecayrescaling.utility as utility
 def check_sanity(path_to_decayfile, path_to_referencefile, particle):
-    """extract and compare the decays with a reference
+    """extract decays of a particle from a source file and compare them with a reference
 
+    The function will print out warnings if
+        I. The decay is not found in the reference
+        II. The decay is found, but the branching fraction in the source differs by more than 1 sigma from the branching fraction in the reference
+        III. The decay is found, but the branching fraction in the source is larger than the limit in the reference
 
+    This function will also print some statistics at the end
     """
 
     if (extract_decays_from_decay(path_to_decayfile, particle) != 0):
@@ -164,6 +169,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
 
 
 def get_generators():
+    """return a set of the generators used in the EvtGen Decay.dec file""" 
     generators = [
     "VSS",
     "VSP_PWAVE",
@@ -196,7 +202,17 @@ def get_generators():
 def find_decay_in_reference(referencefile, decay_list):
     """search for decay in provided reference file
 
+    The reference file created by extract_decays_from_reference() is searched
+    for the decay into the given particles and the first match is returned
+    
+    If the decay contains a K_0L and is not found then it tries again with 
+    the K_0L replaced by K_0S.
 
+    returns:
+        - branching_ratio: float
+        - branching_ratio_error_plus: float
+        - branching_ratio_error_minus: float
+        - -1 for all variables if the decay is not found
     """
 
     decay_list.sort()
