@@ -26,7 +26,7 @@ currently implemented functionality
 1. extracting the decays of a particle from an EvtGen Decay.Dec file
 2. extract the decays from a reference ascii-file from pdg and warn in the following cases:
 
-   I. The decays has not been found
+   I. The decay has not been found
    II. The decay has been found but deviates more than 1 sigma from the reference value
    III. The decay has been found, but the branching fraction is above the limit from the reference file
 
