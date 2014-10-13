@@ -19,6 +19,24 @@ planned funcionality
     
 6. create an appropiate directory-structure and put every file created in step 5 into its own directory
 
+
+currently implemented functionality
+-----------------------------------
+
+1. extracting the decays of a particle from an EvtGen Decay.Dec file
+2. extract the decays from a reference ascii-file from pdg and warn in the following cases:
+
+   I. The decays has not been found
+   II. The decay has been found but deviates more than 1 sigma from the reference value
+   III. The decay has been found, but the branching fraction is above the limit from the reference file
+
+
+next steps
+----------
+
+See wiki at https://github.com/micgro42/SaneDecayRescaling/wiki/
+
+
 development resources
 ---------------------
 
@@ -29,10 +47,14 @@ current result of the tests at travis-ci:
    :target: https://travis-ci.org/micgro42/SaneDecayRescaling
 
 
+Code Coverage of these tests:
+
 .. image:: https://coveralls.io/repos/micgro42/SaneDecayRescaling/badge.png
    :target: https://coveralls.io/r/micgro42/SaneDecayRescaling
    :align: center
 
+
+Status of the Documentation
 
 .. image:: https://readthedocs.org/projects/sanedecayrescaling/badge/?version=latest
    :target: https://readthedocs.org/projects/sanedecayrescaling/?badge=latest
