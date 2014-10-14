@@ -128,6 +128,11 @@ def extract_decays_from_reference(path_to_reference_file, particle):
             print e.msg
             print e.line
             raise
+        except (BadData) as e:
+            daughters = e.daughters
+            branching_fraction = "bad"
+            branching_fraction_error_plus = "bad"
+            branching_fraction_error_minus = "bad"
         except:
             print "Error in line", linenumber_begin_decay + position_in_decay + 2
             raise
@@ -178,6 +183,10 @@ def extract_decay_from_lines(lines):
                 daughters.insert(index, daughter)
 
 # get branching fraction and errors
+    try:
+        column2[0]
+    except IndexError:
+        raise BadData(lines, daughters)
     if (column2[0] == '('): #default
         column2 = column2.lstrip('(')
         column2 = column2.rstrip(')')
