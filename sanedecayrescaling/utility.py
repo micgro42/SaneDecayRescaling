@@ -13,3 +13,9 @@ class ParseError(Exception):
     def __init__(self, line , msg = 'some parsing went wrong'):
         self.line = line
         self.msg = msg
+
+class BadData(Exception):
+    def __init__(self, line, daughters, msg = 'The decay is not usefully listed.'):
+        self.line = line
+        self.msg = msg
+        self.daughters = daughters
