@@ -79,7 +79,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
 
 
             pdg_branching_ratio, pdg_branching_ratio_error_plus, \
-            pdg_branching_ratio_error_minus = find_decay_in_reference(referencefile, parts)
+            pdg_branching_ratio_error_minus = find_decay_in_reference(referencefile, parts, branching_ratio)
             if (pdg_branching_ratio == -1): # TODO: replace print with raise warning and write appropriate tests
                 print "Warning: Decay ", particle, "to", parts, "not found"
                 number_of_decays_not_found += 1
@@ -199,7 +199,7 @@ def get_generators():
 
 
 
-def find_decay_in_reference(referencefile, decay_list):
+def find_decay_in_reference(referencefile, decay_list, br=0):
     """search for decay in provided reference file
 
     The reference file created by extract_decays_from_reference() is searched
@@ -218,6 +218,7 @@ def find_decay_in_reference(referencefile, decay_list):
     decay_list.sort()
     referencefile.seek(0)
     decay_found = False
+    found_decays = []
     for i, line in enumerate(referencefile):
         if (line == '\n'):
             continue
@@ -236,9 +237,16 @@ def find_decay_in_reference(referencefile, decay_list):
 #             print parts
             if (decay_list == parts):
                 decay_found = True
-                break
+                distance = abs(br - branching_ratio) # /TODO: decide if sigma would be a better measure here.
+                decay_tuple = distance, branching_ratio, branching_ratio_error_plus, branching_ratio_error_minus
+                found_decays.append(decay_tuple)
+
     if (decay_found):
-        return branching_ratio, branching_ratio_error_plus, branching_ratio_error_minus
+        if (len(found_decays) > 1):
+            print "Warning, this decays has been found more than once in the decayfile"
+            #/TODO: Add some way to count these multiple occurences
+            found_decays.sort(key = lambda tup: tup[0])
+        return found_decays[0][1], found_decays[0][2], found_decays[0][3]
     elif ('K_L0' in decay_list):
         mod_decay_list = []
         for particle in decay_list:
@@ -246,7 +254,7 @@ def find_decay_in_reference(referencefile, decay_list):
                 mod_decay_list.append('K_S0')
             else:
                 mod_decay_list.append(particle)
-        return find_decay_in_reference(referencefile, mod_decay_list)
+        return find_decay_in_reference(referencefile, mod_decay_list, br)
     else:
         return -1, -1, -1
 
