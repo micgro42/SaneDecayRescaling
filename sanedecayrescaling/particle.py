@@ -11,8 +11,11 @@ class particle_decays(object):
     def __init__(self, particle, *args, **kwargs):
         self.particle = particle
         self.ref_file_path = kwargs.get('ref_file_path','')
+        self.source_file_path = kwargs.get('source_file_path','')
         if (self.ref_file_path is not ''):
             self.read_pdg_reference(self.ref_file_path)
+        if (self.source_file_path is not ''):
+            self.read_evtgen_source(self.source_file_path)
 
     def get_branching_fraction(self, daughters):
         """get the branching fraction for a specific decay if available
@@ -34,6 +37,18 @@ class particle_decays(object):
         """
         extract_decays.extract_decays_from_reference(path_to_reference_file, self.particle, self.particle + "_ref.tmp")
         self.ref_file = open(self.particle + "_ref.tmp")
-        self.reflines = self.ref_file.readlines()
+        self.ref_lines = self.ref_file.readlines()
         #ref_file.close() #@TODO: properly
         #os.remove(self.particle + "_ref.tmp")
+
+    def read_evtgen_source(self, path_to_source):
+        """
+        extract data from a evtgen source file
+        """
+        extract_decays.extract_decays_from_decay(path_to_source, self.particle, self.particle + "_source.tmp")
+        self.source_file = open(self.particle + "_source.tmp")
+        self.source_lines = self.source_file.readlines()
+
+    def check_sanity(self):
+        pass
+        
