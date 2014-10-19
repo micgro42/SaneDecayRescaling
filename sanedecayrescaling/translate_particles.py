@@ -62,6 +62,7 @@ class hep_translator:
             'D(s1)(2460)-': 'D_s1-',
             'D(s1)(2536)+': "D'_s1+",
             'D(s1)(2536)-': "D'_s1-",
+            'phi(1020)': 'phi',
             "eta'(958)": "eta'",
             'eta(c)': 'eta_c',
             'eta(c)(2S)': 'eta_c(2S)',
