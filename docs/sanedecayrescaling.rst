@@ -15,6 +15,7 @@ Submodules
 
    sanedecayrescaling.check_sanity
    sanedecayrescaling.extract_decays
+   sanedecayrescaling.particle
    sanedecayrescaling.temp
    sanedecayrescaling.translate_particles
    sanedecayrescaling.utility

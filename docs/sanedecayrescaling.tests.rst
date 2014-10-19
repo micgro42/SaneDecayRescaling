@@ -10,6 +10,7 @@ Submodules
    sanedecayrescaling.tests.test_extract_decays
    sanedecayrescaling.tests.test_extract_decays_from_lines
    sanedecayrescaling.tests.test_make_single_line_snippets
+   sanedecayrescaling.tests.test_particle
    sanedecayrescaling.tests.test_utility
 
 Module contents
