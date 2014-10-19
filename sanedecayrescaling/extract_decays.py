@@ -1,7 +1,7 @@
 import os
 from utility import *
 from translate_particles import *
-def extract_decays_from_decay(path_to_decay_file, particle):
+def extract_decays_from_decay(path_to_decay_file, particle, work_file_name = "workfile.tmp"):
     """get the decays from an EvtGen Decay.Dec file and write them to disk
 
     returns:
@@ -26,7 +26,7 @@ def extract_decays_from_decay(path_to_decay_file, particle):
             raise SystemExit(os.EX_DATAERR)
 
     stringfound = -1
-    workfile = open('workfile.tmp','w')
+    workfile = open(work_file_name,'w')
     workfile.write(line)
     linenumber_end_decay = linenumber_begin_decay
     while (stringfound == -1):
