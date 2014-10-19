@@ -42,7 +42,7 @@ def extract_decays_from_decay(path_to_decay_file, particle):
     evtgen_decay_dec.close()
     return 0
 
-def extract_decays_from_reference(path_to_reference_file, particle):
+def extract_decays_from_reference(path_to_reference_file, particle, ref_file_name = "workreffile.tmp"):
     """
     Extracts decay of particle from reference file 
 
@@ -53,7 +53,7 @@ def extract_decays_from_reference(path_to_reference_file, particle):
         - nothing
 
     creates:
-        - file workreffile.tmp
+        - file ref_file_name, which defaults to workreffile.tmp
     """
     t = hep_translator()
     particle = t.translate_evtgen_to_pdg(particle)
@@ -93,7 +93,7 @@ def extract_decays_from_reference(path_to_reference_file, particle):
     reference_file.readline()
     reference_file.readline()
 
-    work_reference_file = open('workreffile.tmp','w')
+    work_reference_file = open(ref_file_name,'w')
     work_reference_file.write("Decay " + t.translate_pdg_to_evtgen(particle) +"\n")
     position_in_decay = 0
     for line in iter(reference_file.readline, ''):
