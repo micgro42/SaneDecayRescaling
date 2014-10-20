@@ -1,6 +1,7 @@
 import os
 from utility import *
 from translate_particles import *
+from particle import *
 def extract_decays_from_decay(path_to_decay_file, particle, work_file_name = "workfile.tmp"):
     """get the decays from an EvtGen Decay.Dec file and write them to disk
 
@@ -183,6 +184,23 @@ def extract_decay_from_lines(lines):
             daughters[index] = daughter
             for i in range(1, mutliplicity):
                 daughters.insert(index, daughter)
+    # handle sub decays with products
+    subdecay_br = 0
+    subdecay_brep = 0
+    subdecay_brem = 0
+    if (',' in daughters): # /todo there is possibly more than one subdecay per decay
+        sep_position = daughters.index(',')
+        subdecay = daughters[sep_position + 1:]
+        print subdecay
+        daughters = daughters[:sep_position]
+        print daughters
+        subdecay_mother = subdecay.pop(0)
+        subdecay_daughters = subdecay[1:]
+        try:
+            with particle_decays(subdecay_mother, ref_file_path = 'PDG2012-SummaryTables-ASCII.txt') as subdecay:#/todo get the ref_file_path from an argument or variable 
+                subdecay_br, subdecay_brep, subdecay_brem = subdecay.get_branching_fraction(subdecay_daughters)
+        except:
+            pass #/todo: decent exception handling
 
 # get branching fraction and errors
     try:
@@ -239,6 +257,8 @@ def extract_decay_from_lines(lines):
         branching_fraction = branching_fraction * scale
         branching_fraction_error_plus = branching_fraction_error_plus * scale
         branching_fraction_error_minus = branching_fraction_error_minus * scale
+        if (subdecay_br > 0):
+            branching_fraction = branching_fraction/subdecay_br
 
 
     return daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus
