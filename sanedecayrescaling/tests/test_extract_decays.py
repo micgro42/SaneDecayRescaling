@@ -1,6 +1,5 @@
 import os
-from sanedecayrescaling.extract_decays import extract_decays_from_decay as blub
-from sanedecayrescaling.extract_decays import extract_decays_from_reference
+import sanedecayrescaling
 from pytest import fixture
 import pytest
 
@@ -86,7 +85,7 @@ def fixture_source(request):
 
 
 def test_successfully_extracting_decay(fixture_source):
-    assert blub('source_decay_file.dec.tmp', "B0") == 0
+    assert sanedecayrescaling.extract_decays.extract_decays_from_decay('source_decay_file.dec.tmp', "B0") == 0
     workfile=open("workfile.tmp",'r')
     for i, line in enumerate(workfile):
         if i == 0:
@@ -99,7 +98,7 @@ def test_successfully_extracting_decay(fixture_source):
 
 def test_decay_not_found(fixture_source):
     with pytest.raises(SystemExit) as cm:
-        blub('source_decay_file.dec.tmp', "B+")
+        sanedecayrescaling.extract_decays.extract_decays_from_decay('source_decay_file.dec.tmp', "B+")
     ex = cm.value
     assert ex.code == os.EX_DATAERR # SystemExit should be os.EX_DATAERR!
     assert not os.path.isfile("workdir.tmp") # workdir.tmp has been created even so it shouldn't have been
@@ -107,7 +106,7 @@ def test_decay_not_found(fixture_source):
 
 def test_decayfile_not_found(fixture_source):
     with pytest.raises(SystemExit) as cm:
-        blub('Xsource_decay_file.dec.tmp', "B0")
+        sanedecayrescaling.extract_decays.extract_decays_from_decay('Xsource_decay_file.dec.tmp', "B0")
     ex = cm.value
     assert ex.code == os.EX_IOERR # SystemExit should be os.EX_IOERR!
     assert not os.path.isfile("workdir.tmp") # workdir.tmp has been created even so it shouldn't have been
@@ -115,13 +114,13 @@ def test_decayfile_not_found(fixture_source):
 
 def test_particle_name_incomplete(fixture_source):
     with pytest.raises(SystemExit) as cm:
-        blub('source_decay_file.dec.tmp', "B")
+        sanedecayrescaling.extract_decays.extract_decays_from_decay('source_decay_file.dec.tmp', "B")
     ex = cm.value
     assert ex.code == os.EX_DATAERR # SystemExit should be os.EX_DATAERR!
     assert not os.path.isfile("workdir.tmp") # workdir.tmp has been created even so it shouldn't have been
 
 def test_extract_decays_from_reference(fixture_source):
-    extract_decays_from_reference('reference_file.tmp','D*(2010)+-')
+    sanedecayrescaling.extract_decays.extract_decays_from_reference('reference_file.tmp','D*(2010)+-')
     reference_file = open('workreffile.tmp','r')
     reference_file_lines = reference_file.readlines()
     assert reference_file_lines[0] == 'Decay D*+-\n'
@@ -156,7 +155,7 @@ def test_extract_decays_from_reference_missing_blank_line():
 "| D0 |\n",
 "======\n"])
     reference_file.close()
-    extract_decays_from_reference('reference_file.tmp','D+')
+    sanedecayrescaling.extract_decays.extract_decays_from_reference('reference_file.tmp','D+')
     work_ref_file = open('workreffile.tmp','r')
     work_ref_file_lines = work_ref_file.readlines()
     assert work_ref_file_lines[0] == 'Decay D+\n'
@@ -188,7 +187,7 @@ def test_extract_decays_from_reference_two_lines_missing_blank_line():
 "| D0 |\n",
 "======\n"])
     reference_file.close()
-    extract_decays_from_reference('reference_file.tmp','D+')
+    sanedecayrescaling.extract_decays.extract_decays_from_reference('reference_file.tmp','D+')
     work_ref_file = open('workreffile.tmp','r')
     work_ref_file_lines = work_ref_file.readlines()
     assert work_ref_file_lines[0] == 'Decay D+\n'

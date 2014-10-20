@@ -1,5 +1,5 @@
 import pytest
-from sanedecayrescaling import particle
+from sanedecayrescaling.particle import ParticleDecays
 
 
 
@@ -26,7 +26,7 @@ def test_D0phiKK():
 "| D0 |\n",
 "======\n"])
     reference_file.close()
-    my_particle = particle.particle_decays('D+',ref_file_path = 'reference_file.tmp')
+    my_particle = ParticleDecays('D+',ref_file_path = 'reference_file.tmp')
     br, brep, brem = my_particle.get_branching_fraction(['Kbar*(892)0', 'e+', 'nu(e)'])
     assert br == 0.0552
     assert brep == 0.0015
