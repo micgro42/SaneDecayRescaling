@@ -152,7 +152,8 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     print "number of decays skipped because the branching ratio is 0:", number_of_decays_skipped_0BR, "\n"
 
     print "number of decays not found because of one or more additional pi0:", number_of_not_found_because_pi0
-    print "that are ", 100.0 * number_of_not_found_because_pi0 / number_of_decays_not_found, "% of the decays not found.\n"
+    if (number_of_decays_not_found > 0):
+        print "that are ", 100.0 * number_of_not_found_because_pi0 / number_of_decays_not_found, "% of the decays not found.\n"
 
     print "number of phi decays found:", phi_decays_found
     print "braning ratio of phi decays found:", br_phi_decays_found
