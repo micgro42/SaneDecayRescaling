@@ -207,8 +207,10 @@ def extract_decay_from_lines(lines):
         branching_fraction_error_plus = 0
         branching_fraction_error_minus = 0
     elif (column2[0] == 's'): #seen
-        print lines
-        raise ParseError(lines,"seen")
+        branching_fraction = 0
+        branching_fraction_error_plus = 0
+        branching_fraction_error_minus = 0
+        scale = 0
     elif (column2[0] == 'n'): #not seen
         branching_fraction = 0
         branching_fraction_error_plus = 0
@@ -216,6 +218,11 @@ def extract_decay_from_lines(lines):
         scale = 0
     elif (column2[0] == 'l'): #large
         pass
+    elif (column2[0] == 'd'): #dominant
+        branching_fraction = 1
+        branching_fraction_error_plus = 0
+        branching_fraction_error_minus = 0
+        scale = 1
     else:
         raise ParseError(lines,"first char in '" + column2 + "' not implemented")
 
