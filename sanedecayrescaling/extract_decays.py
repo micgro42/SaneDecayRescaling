@@ -1,7 +1,10 @@
+"""
+This module provides functions to extract data from files (source and reference)
+"""
 import os
-from utility import *
-from translate_particles import *
-from particle import *
+from sanedecayrescaling.utility import *
+from sanedecayrescaling.translate_particles import *
+from sanedecayrescaling.particle import *
 def extract_decays_from_decay(path_to_decay_file, particle, work_file_name = "workfile.tmp"):
     """get the decays from an EvtGen Decay.Dec file and write them to disk
 
@@ -45,11 +48,11 @@ def extract_decays_from_decay(path_to_decay_file, particle, work_file_name = "wo
 
 def extract_decays_from_reference(path_to_reference_file, particle, ref_file_name = "workreffile.tmp"):
     """
-    Extracts decay of particle from reference file 
+    Extracts decay of particle from reference file
 
-    The functionality to extract the decay of an anti-particle to a particle in 
+    The functionality to extract the decay of an anti-particle to a particle in
     the reference file is not yet implemented.
-    
+
     returns:
         - nothing
 
@@ -67,7 +70,7 @@ def extract_decays_from_reference(path_to_reference_file, particle, ref_file_nam
         if (string_found != -1):
             file_position_begin_decay = reference_file.tell()
             print "string '%s DECAY MODES' found at line %i" % (particle, linenumber_begin_decay)
-            break;
+            break
     if (string_found == -1):
         print "String '%s DECAY MODES' not found!" % (particle)
         raise SystemExit(os.EX_DATAERR)
@@ -87,7 +90,7 @@ def extract_decays_from_reference(path_to_reference_file, particle, ref_file_nam
             print "String '%s' not found!" % (end_decay_string)
             raise SystemExit(os.EX_DATAERR)
 
-    
+
     decay_length = (linenumber_end_decay -2) - (linenumber_begin_decay + 2)
     print "decay_length", decay_length
     reference_file.seek(file_position_begin_decay, 0)
@@ -100,7 +103,7 @@ def extract_decays_from_reference(path_to_reference_file, particle, ref_file_nam
     for line in iter(reference_file.readline, ''):
         position_in_decay += 1
         if (position_in_decay > decay_length ):
-            break;
+            break
         if (line == '\n'):
             continue
         if (line[0] == ' '):
@@ -120,17 +123,17 @@ def extract_decays_from_reference(path_to_reference_file, particle, ref_file_nam
 
         try:
             daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decay_from_lines(decay_lines)
-        except (IndexError) as e:
+        except (IndexError) as ex:
             print "IndexError in line", linenumber_begin_decay + position_in_decay + 2
             print decay_lines
             raise
-        except (ParseError) as e:
+        except (ParseError) as ex:
             print "ParseError in line", linenumber_begin_decay + position_in_decay + 2
-            print e.msg
-            print e.line
+            print ex.msg
+            print ex.line
             raise
-        except (BadData) as e:
-            daughters = e.daughters
+        except (BadData) as ex:
+            daughters = ex.daughters
             branching_fraction = "bad"
             branching_fraction_error_plus = "bad"
             branching_fraction_error_minus = "bad"
@@ -149,9 +152,9 @@ def extract_decays_from_reference(path_to_reference_file, particle, ref_file_nam
 
 def extract_decay_from_lines(lines):
     """
-    parse lines from a decayfile into decay-daughters, branching fraction, errors 
+    parse lines from a decayfile into decay-daughters, branching fraction, errors
 
-    returns: 
+    returns:
         - daughters: list of strings
         - branching_fraction: float
         - branching_fraction_error_plus, branching_fraction_error_plus: float
@@ -197,10 +200,10 @@ def extract_decay_from_lines(lines):
         subdecay_mother = subdecay.pop(0)
         subdecay_daughters = subdecay[1:]
         try:
-            with particle_decays(subdecay_mother, ref_file_path = 'PDG2012-SummaryTables-ASCII.txt') as subdecay:#/todo get the ref_file_path from an argument or variable 
+            with particle_decays(subdecay_mother, ref_file_path = 'PDG2012-SummaryTables-ASCII.txt') as subdecay:#/todo get the ref_file_path from an argument or variable
                 subdecay_br, subdecay_brep, subdecay_brem = subdecay.get_branching_fraction(subdecay_daughters)
-        except:
-            pass #/todo: decent exception handling
+        except: #/todo: decent exception handling
+            pass
 
 # get branching fraction and errors
     try:
@@ -266,7 +269,7 @@ def extract_decay_from_lines(lines):
 
 def make_single_line_snippets(input_lines):
     """
-    create and return reconstructed snippets 
+    create and return reconstructed snippets
 
     The ascii-refernece file has more or less 3 columns, the first until 40 chars
     the second column goes to 66, after which comes the last colum, which is
@@ -384,7 +387,7 @@ def remove_flags(column, flag_list):
 
     returns:
         - column: input column string minus the flags
-        - flag_list: input flag_list string with the flags added in front 
+        - flag_list: input flag_list string with the flags added in front
     """
     flags = set(['L',
                  'B',
