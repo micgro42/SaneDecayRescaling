@@ -1,5 +1,5 @@
 import os
-from extract_decays import *
+from sanedecayrescaling.extract_decays import *
 import sanedecayrescaling.utility as utility
 def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     """extract decays of a particle from a source file and compare them with a reference
