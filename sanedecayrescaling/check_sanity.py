@@ -29,16 +29,18 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     evtgen_BR_decays_skipped = 0
     number_of_decays_skipped_0BR = 0
 
+    number_of_not_found_because_pi0 = 0
+
     phi_decays_found = 0
     br_phi_decays_found = 0
     phi_decays_not_found = 0
     br_phi_decays_not_found = 0
-    
+
     eta_decays_found = 0
     br_eta_decays_found = 0
     eta_decays_not_found = 0
     br_eta_decays_not_found = 0
-    
+
     etap_decays_found = 0
     br_etap_decays_found = 0
     etap_decays_not_found = 0
@@ -84,9 +86,16 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
                 print "Warning: Decay ", particle, "to", parts, "not found"
                 number_of_decays_not_found += 1
                 evtgen_BR_decays_not_found += branching_ratio
+                for elem in parts:
+                    if (elem == 'pi0'):
+                        parts.remove('pi0')
+                        tmp_br, tmp_brep, tmp_brem = find_decay_in_reference(referencefile, parts, branching_ratio)
+                        if (tmp_br != -1):
+                            number_of_not_found_because_pi0 += 1
+                            break
             # \TODO: include pdg_branching_ratio == 0 case (not seen)
             elif (pdg_branching_ratio_error_plus == 0):
-                print "Warning: Decay ", particle, "to", parts, " is a limit decay"
+                #print "Warning: Decay ", particle, "to", parts, " is a limit decay"
                 if (branching_ratio > pdg_branching_ratio):
                     print "branching ratio of ", branching_ratio, " exceeds limit of ", pdg_branching_ratio
                 else:
@@ -141,7 +150,10 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     
     print "sum of the above EvtGen branching ratios:", evtgen_BR_decays_found + evtgen_BR_decays_not_found + evtgen_BR_decays_skipped
     print "number of decays skipped because the branching ratio is 0:", number_of_decays_skipped_0BR, "\n"
-    
+
+    print "number of decays not found because of one or more additional pi0:", number_of_not_found_because_pi0
+    print "that are ", 100.0 * number_of_not_found_because_pi0 / number_of_decays_not_found, "% of the decays not found.\n"
+
     print "number of phi decays found:", phi_decays_found
     print "braning ratio of phi decays found:", br_phi_decays_found
     print "number of phi decays not found:", phi_decays_not_found
