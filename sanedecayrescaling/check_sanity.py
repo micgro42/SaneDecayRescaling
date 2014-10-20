@@ -22,13 +22,13 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     generators_set = get_generators()
 
     number_of_decays_found = 0
-    pdg_BR_decays_found = 0
-    evtgen_BR_decays_found = 0
+    pdg_br_decays_found = 0
+    evtgen_br_decays_found = 0
     number_of_decays_not_found = 0
-    evtgen_BR_decays_not_found = 0
+    evtgen_br_decays_not_found = 0
     number_of_decays_skipped_pythia = 0
-    evtgen_BR_decays_skipped = 0
-    number_of_decays_skipped_0BR = 0
+    evtgen_br_decays_skipped = 0
+    number_of_decays_skipped_0br = 0
 
     number_of_not_found_because_pi0 = 0
 
@@ -59,7 +59,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
             pass
         else:
             if (branching_ratio == 0.0): # TODO: research what decays are affected by this and if they are relevant
-                number_of_decays_skipped_0BR += 1
+                number_of_decays_skipped_0br += 1
                 continue
             generator_found = False
             while (not generator_found):
@@ -73,7 +73,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
                 generator_found = last_element in generators_set
             if (last_element == 'PYTHIA'):
                 number_of_decays_skipped_pythia +=1
-                evtgen_BR_decays_skipped += branching_ratio
+                evtgen_br_decays_skipped += branching_ratio
                 continue
             second_last_element = parts.pop(-1)
             while (second_last_element in generators_set):
@@ -86,7 +86,7 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
             if (pdg_branching_ratio == -1): # TODO: replace print with raise warning and write appropriate tests
                 print "Warning: Decay ", particle, "to", parts, "not found"
                 number_of_decays_not_found += 1
-                evtgen_BR_decays_not_found += branching_ratio
+                evtgen_br_decays_not_found += branching_ratio
                 for elem in parts:
                     if (elem == 'pi0'):
                         parts.remove('pi0')
@@ -110,8 +110,8 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
                 #TODO: deviation should be shown relative to the appropriate error
             if (pdg_branching_ratio != -1):
                 number_of_decays_found += 1
-                pdg_BR_decays_found += pdg_branching_ratio
-                evtgen_BR_decays_found += branching_ratio
+                pdg_br_decays_found += pdg_branching_ratio
+                evtgen_br_decays_found += branching_ratio
                 if ('phi' in parts):
                     phi_decays_found += 1
                     br_phi_decays_found += branching_ratio
@@ -140,17 +140,17 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     print "decay file used:", path_to_decayfile, "\n"
     
     print "number of decays found:", number_of_decays_found
-    print "summed EvtGen branching ratio of decays found:", evtgen_BR_decays_found
-    print "summed pdg branching ratio of decays found:", pdg_BR_decays_found, "\n"
+    print "summed EvtGen branching ratio of decays found:", evtgen_br_decays_found
+    print "summed pdg branching ratio of decays found:", pdg_br_decays_found, "\n"
     
     print "number of decays not found:", number_of_decays_not_found
-    print "summed EvtGen branching ratio of decays not found:", evtgen_BR_decays_not_found, "\n"
+    print "summed EvtGen branching ratio of decays not found:", evtgen_br_decays_not_found, "\n"
     
     print "Number of the Decays skipped because they are done by pythia:", number_of_decays_skipped_pythia
-    print "summed EvtGen branching ratio of the decays skipped:", evtgen_BR_decays_skipped, "\n"
+    print "summed EvtGen branching ratio of the decays skipped:", evtgen_br_decays_skipped, "\n"
     
-    print "sum of the above EvtGen branching ratios:", evtgen_BR_decays_found + evtgen_BR_decays_not_found + evtgen_BR_decays_skipped
-    print "number of decays skipped because the branching ratio is 0:", number_of_decays_skipped_0BR, "\n"
+    print "sum of the above EvtGen branching ratios:", evtgen_br_decays_found + evtgen_br_decays_not_found + evtgen_br_decays_skipped
+    print "number of decays skipped because the branching ratio is 0:", number_of_decays_skipped_0br, "\n"
 
     print "number of decays not found because of one or more additional pi0:", number_of_not_found_because_pi0
     if (number_of_decays_not_found > 0):
