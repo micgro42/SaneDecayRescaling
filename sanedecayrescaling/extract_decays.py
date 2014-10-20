@@ -359,11 +359,23 @@ def remove_flags(column, flag_list):
         - column: input column string minus the flags
         - flag_list: input flag_list string with the flags added in front 
     """
-    flags = set(['L', 'B', 'LF', 'B1', 'C1', 'DC', '3-body'])
+    flags = set(['L',
+                 'B',
+                 'LF',
+                 'B1',
+                 'C1',
+                 'DC',
+                 'CP',
+                 '3-body',
+                 'parallel',
+                 'perpendicular',
+                 'longitudinal',
+                 'helicities'])
     column = column.split()
     while (column[-1].strip(',') in flags):
         flag_list = column.pop(-1).strip(',') + " " + flag_list
     column = ' '.join(column)
+    column = column.rstrip().rstrip(',').rstrip()
     flag_list = flag_list.strip()
     return column, flag_list
 
