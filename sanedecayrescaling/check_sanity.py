@@ -1,6 +1,7 @@
 import os
-from sanedecayrescaling.extract_decays import *
-import sanedecayrescaling.utility as utility
+import sanedecayrescaling
+
+
 def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     """extract decays of a particle from a source file and compare them with a reference
 
@@ -12,12 +13,12 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
     This function will also print some statistics at the end
     """
 
-    if (extract_decays_from_decay(path_to_decayfile, particle) != 0):
+    if (sanedecayrescaling.extract_decays.extract_decays_from_decay(path_to_decayfile, particle) != 0):
         print "ERROR finding decay in Source File. Exiting"
         raise SystemExit(os.EX_DATAERR)
 
-    workfile = utility.open_file_safely("workfile.tmp", 'r')
-    referencefile = utility.open_file_safely(path_to_referencefile, 'r')
+    workfile = sanedecayrescaling.utility.open_file_safely("workfile.tmp", 'r')
+    referencefile = sanedecayrescaling.utility.open_file_safely(path_to_referencefile, 'r')
     generators_set = get_generators()
 
     number_of_decays_found = 0

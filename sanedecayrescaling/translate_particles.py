@@ -1,7 +1,5 @@
 """
 provide class hep_translator
-
-
 """
 class HepTranslator(object):
     """
@@ -118,7 +116,7 @@ class HepTranslator(object):
     """
     the pdg ascii-file usually doesn't show the antiparticles seperately
     """
-    pdg_anti_particle_dict={
+    pdg_anti_particle_dict = {
             'p':'pbar',
             'n':'nbar',
             'e+': 'e-',
@@ -142,7 +140,7 @@ class HepTranslator(object):
     """
     some particles have two names in the pdg ascii file
     """
-    pdg_alt_names={}
+    pdg_alt_names = {}
 
     def __init__(self):
         self.evtgen_pdg_dict = {v: k for k, v in self.pdg_evtgen_dict.iteritems()}
@@ -173,9 +171,9 @@ class HepTranslator(object):
     def translate_pdg_anti_particle(self, pdg_particle_name):
         """Translate the name of a particle to it's anti-particle"""
         if pdg_particle_name in self.pdg_anti_particle_dict:
-            anti_particle_name = self.pdg_anti_particle_dict(pdg_particle_name)
+            anti_particle_name = self.pdg_anti_particle_dict[pdg_particle_name]
         elif pdg_particle_name in self.pdg_anti_particle_inv_dict:
-            anti_particle_name = self.pdg_anti_particle_inv_dict(pdg_particle_name)
+            anti_particle_name = self.pdg_anti_particle_inv_dict[pdg_particle_name]
         else:
             anti_particle_name = pdg_particle_name
 

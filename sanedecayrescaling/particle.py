@@ -1,10 +1,12 @@
-import translate_particles
-import extract_decays
-import check_sanity
+"""
+provides the wrapperclass to compare and modify evtgen source files
+"""
+import sanedecayrescaling
+from sanedecayrescaling.translate_particles import HepTranslator
 import os
-class particle_decays(object):
+class ParticleDecays(object):
     """
-    .. todo:: Description of class particle_decays
+    .. todo:: Description of class ParticleDecays
 
     """
 
@@ -35,9 +37,9 @@ class particle_decays(object):
             - branching_fraction_error_plus: float
             - branching_fraction_error_minus: float
         """
-        t = translate_particles.HepTranslator()
-        daughters = map(t.translate_pdg_to_evtgen, daughters)
-        branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = check_sanity.find_decay_in_reference(self.ref_file, daughters, 0)
+        _t = HepTranslator()
+        daughters = map(_t.translate_pdg_to_evtgen, daughters)
+        branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = sanedecayrescaling.check_sanity.find_decay_in_reference(self.ref_file, daughters, 0)
         return branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus
 
     def read_pdg_reference(self, path_to_reference_file):
@@ -45,7 +47,7 @@ class particle_decays(object):
         extract the decays from a reference file and store them in local var
 
         """
-        extract_decays.extract_decays_from_reference(path_to_reference_file, self.particle, self.particle + "_ref.tmp")
+        sanedecayrescaling.extract_decays.extract_decays_from_reference(path_to_reference_file, self.particle, self.particle + "_ref.tmp")
         self.ref_file = open(self.particle + "_ref.tmp")
         self.ref_lines = self.ref_file.readlines()
 
@@ -53,10 +55,9 @@ class particle_decays(object):
         """
         extract data from a evtgen source file
         """
-        extract_decays.extract_decays_from_decay(path_to_source, self.particle, self.particle + "_source.tmp")
+        sanedecayrescaling.extract_decays.extract_decays_from_decay(path_to_source, self.particle, self.particle + "_source.tmp")
         self.source_file = open(self.particle + "_source.tmp")
         self.source_lines = self.source_file.readlines()
 
     def check_sanity(self):
         pass
-        
