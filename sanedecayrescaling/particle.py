@@ -48,8 +48,6 @@ class particle_decays(object):
         extract_decays.extract_decays_from_reference(path_to_reference_file, self.particle, self.particle + "_ref.tmp")
         self.ref_file = open(self.particle + "_ref.tmp")
         self.ref_lines = self.ref_file.readlines()
-        #ref_file.close() #@TODO: properly handle files and remove them when done
-        #os.remove(self.particle + "_ref.tmp")
 
     def read_evtgen_source(self, path_to_source):
         """
