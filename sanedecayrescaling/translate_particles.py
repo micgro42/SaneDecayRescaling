@@ -26,7 +26,7 @@ class HepTranslator(object):
             'K(1)(1270)0': 'K_10',
             'K(1)(1270)-': 'K_1-',
             'K(1)(1270)+': 'K_1+',
-            'K(1)(1400)0': "K'_10",
+            'K(1)(1400)0': "K'_10", #.. todo:: K'_10 and anti-K'_10 should translate equivalently?
             'K(1)(1270)0': "anti-K'_10", #maybe this should be Kbar(1)(1270)0
             'K(1)(1400)-': "K'_1-",
             'K(1)(1400)+': "K'_1+",
@@ -115,14 +115,43 @@ class HepTranslator(object):
             'f(2)(1270)': 'f_2',
     }
 
-    pdg_anti_particle={}
+    """
+    the pdg ascii-file usually doesn't show the antiparticles seperately
+    """
+    pdg_anti_particle_dict={
+            'p':'pbar',
+            'n':'nbar',
+            'e+': 'e-',
+            'mu+': 'mu-',
+            'tau+': 'tau-',
+            'nu(e)': 'nubar(e)',
+            'nu(mu)': 'nubar(mu)',
+            'nu(tau)': 'nubar(tau)',
+            'pi+': 'pi-',
+            'rho+': 'rho-',
+            'K+': 'K-',
+            'K0': 'Kbar0',
+            'K*(892)+': 'K*(892)-',
+            'K*(892)0': 'Kbar*(892)0',
+            'D+': 'D-',
+            'D0': 'Dbar0',
+            'D*(2010)+': 'D*(2010)-',
+            'D(s)+': 'D_s-',
+    }
+
+    """
+    some particles have two names in the pdg ascii file
+    """
+    pdg_alt_names={}
 
     def __init__(self):
         self.evtgen_pdg_dict = {v: k for k, v in self.pdg_evtgen_dict.iteritems()}
+        self.pdg_anti_particle_inv_dict = {v: k for k, v in self.pdg_anti_particle_dict.iteritems()}
 
 
     def translate_pdg_to_evtgen(self, pdg_particle_name):
         """Return the name of the particle in an EvtGen Decay-File
+
         :param pdg_particle_name: name of a particle in the pdg ascii-file
         :type pdg_particle_name: string
         """
@@ -132,6 +161,7 @@ class HepTranslator(object):
             return pdg_particle_name
     def translate_evtgen_to_pdg(self, evtgen_particle_name):
         """Return the name of the particle in an pdg ASCII-File
+
         :param evtgen_particle_name: name of a particle in the evtgen decay.dec
         :type evtgen_particle_name: string
         """
@@ -139,3 +169,14 @@ class HepTranslator(object):
             return self.evtgen_pdg_dict[evtgen_particle_name]
         else:
             return evtgen_particle_name
+
+    def translate_pdg_anti_particle(self, pdg_particle_name):
+        """Translate the name of a particle to it's anti-particle"""
+        if pdg_particle_name in self.pdg_anti_particle_dict:
+            anti_particle_name = self.pdg_anti_particle_dict(pdg_particle_name)
+        elif pdg_particle_name in self.pdg_anti_particle_inv_dict:
+            anti_particle_name = self.pdg_anti_particle_inv_dict(pdg_particle_name)
+        else:
+            anti_particle_name = pdg_particle_name
+
+        return anti_particle_name
