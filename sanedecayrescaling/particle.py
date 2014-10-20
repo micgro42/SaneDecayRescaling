@@ -4,7 +4,7 @@ import check_sanity
 import os
 class particle_decays(object):
     """
-    @TODO: Description of class particle_decays
+    .. todo:: Description of class particle_decays
 
     """
 

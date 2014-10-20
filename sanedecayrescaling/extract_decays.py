@@ -55,7 +55,7 @@ def extract_decays_from_reference(path_to_reference_file, particle, ref_file_nam
     creates:
         - file ref_file_name, which defaults to workreffile.tmp
     """
-    t = hep_translator()
+    t = HepTranslator()
     particle = t.translate_evtgen_to_pdg(particle)
     reference_file = open_file_safely(path_to_reference_file, 'r')
     string_found = -1
@@ -81,7 +81,7 @@ def extract_decays_from_reference(path_to_reference_file, particle, ref_file_nam
         string_found=line.find(end_decay_string)
         if (string_found != -1):
             print "string '%s' found at line %i" % (end_decay_string, linenumber_end_decay)
-            break;
+            break
         if (line == ""):
             print "String '%s' not found!" % (end_decay_string)
             raise SystemExit(os.EX_DATAERR)
@@ -156,12 +156,13 @@ def extract_decay_from_lines(lines):
         - branching_fraction_error_plus, branching_fraction_error_plus: float
         - 0 errors for limit cases
         - 0 branching fraction for cases of "not seen"
+    .. todo:: Expand the section on subdecays to allow a second subdecay
+    .. todo:: better handling for the exceptions from subdecay defolding
     """
     column1, column2, column3, column_mini = make_single_line_snippets(lines)
     lines = lines.split("\n")
 
 # get scale of numbers
-#TODO: what should this section do for "seen", "not seen" or "large"?
     if (column2.find('%') != -1):
         scale = 0.01
         column2 = column2.rstrip('%')
@@ -174,6 +175,7 @@ def extract_decay_from_lines(lines):
     while (column1[0] == '.'):
         column1 = column1[1:]
     daughters = column1.split()
+    #defold multiplicity
     for index,daughter in enumerate(daughters):
         if (daughter[0].isdigit()):
             mutliplicity = int(daughter[0])
@@ -225,7 +227,7 @@ def extract_decay_from_lines(lines):
         print "branching_fraction:", branching_fraction
         print "branching_fraction_error_plus:", branching_fraction_error_plus
         print "branching_fraction_error_minus:", branching_fraction_error_minus
-        raise ParseError(lines,"failed to parse braching fraction correctly")
+        raise ParseError(lines,"failed to parse branching fraction correctly")
     else:
         branching_fraction = branching_fraction * scale
         branching_fraction_error_plus = branching_fraction_error_plus * scale

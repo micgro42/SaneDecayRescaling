@@ -257,7 +257,7 @@ def find_decay_in_reference(referencefile, decay_list, br=0):
     if (decay_found):
         if (len(found_decays) > 1):
             print "Warning, this decays has been found more than once in the decayfile"
-            #/TODO: Add some way to count these multiple occurences
+            #.. todo:: Add some way to count these multiple occurrences
             found_decays.sort(key = lambda tup: tup[0])
         return found_decays[0][1], found_decays[0][2], found_decays[0][3]
     elif ('K_L0' in decay_list):
