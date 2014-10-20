@@ -1,5 +1,13 @@
-class hep_translator:
-    """translate particle names from one set into another"""
+"""
+provide class hep_translator
+
+
+"""
+class HepTranslator(object):
+    """
+    translate particle names from one set into another
+
+    """
     pdg_evtgen_dict = {
             'nu(e)': 'nu_e',
             'nubar(e)': 'anti-nu_e',
@@ -106,6 +114,8 @@ class hep_translator:
             'f(1)(1285)': 'f_1',
             'f(2)(1270)': 'f_2',
     }
+
+    pdg_anti_particle={}
 
     def __init__(self):
         self.evtgen_pdg_dict = {v: k for k, v in self.pdg_evtgen_dict.iteritems()}
