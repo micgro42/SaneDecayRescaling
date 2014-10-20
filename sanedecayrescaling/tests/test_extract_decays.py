@@ -197,6 +197,20 @@ def test_extract_decays_from_reference_two_lines_missing_blank_line():
     assert work_ref_file_lines[4] == "Enddecay\n"
 
 
+def test_decay_found(fixture_source):
+    ref_file = open('reference_file.tmp','r')
+    file_position_begin_decay, linenumber_begin_decay, decay_length = sanedecayrescaling.extract_decays.find_particle_in_reference('D*(2007)0', ref_file)
+    assert file_position_begin_decay == 352
+    assert linenumber_begin_decay == 10
+    assert decay_length == 1
+
+#the functionality for this test is not yet implemented
+# def test_decay_special_name_found(fixture_source):
+#     ref_file = open('reference_file.tmp','r')
+#     start, end = sanedecayrescaling.extract_decays.find_particle_in_reference('D*(2010)+', ref_file)
+#     assert start == 10
+#     assert end == 15
+
 
 if __name__ == '__main__':
     pytest.main()

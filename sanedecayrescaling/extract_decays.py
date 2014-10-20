@@ -59,37 +59,8 @@ def extract_decays_from_reference(path_to_reference_file, particle, ref_file_nam
     _t = sanedecayrescaling.translate_particles.HepTranslator()
     particle = _t.translate_evtgen_to_pdg(particle)
     reference_file = sanedecayrescaling.utility.open_file_safely(path_to_reference_file, 'r')
-    string_found = -1
-    linenumber_begin_decay = 0
-    for line in iter(reference_file.readline, ''):
-        linenumber_begin_decay += 1
-        string_found=line.find(particle + " DECAY MODES")
-        if (string_found != -1):
-            file_position_begin_decay = reference_file.tell()
-            print "string '%s DECAY MODES' found at line %i" % (particle, linenumber_begin_decay)
-            break
-    if (string_found == -1):
-        print "String '%s DECAY MODES' not found!" % (particle)
-        raise SystemExit(os.EX_DATAERR)
 
-
-
-    string_found = -1
-    linenumber_end_decay = linenumber_begin_decay
-    end_decay_string = "==========================================="
-    for line in iter(reference_file.readline, ''):
-        linenumber_end_decay += 1
-        string_found=line.find(end_decay_string)
-        if (string_found != -1):
-            print "string '%s' found at line %i" % (end_decay_string, linenumber_end_decay)
-            break
-        if (line == ""):
-            print "String '%s' not found!" % (end_decay_string)
-            raise SystemExit(os.EX_DATAERR)
-
-
-    decay_length = (linenumber_end_decay -2) - (linenumber_begin_decay + 2)
-    print "decay_length", decay_length
+    file_position_begin_decay, linenumber_begin_decay, decay_length = find_particle_in_reference(particle, reference_file)
     reference_file.seek(file_position_begin_decay, 0)
     reference_file.readline()
     reference_file.readline()
@@ -407,7 +378,51 @@ def remove_flags(column, flag_list):
     return column, flag_list
 
 
+def find_particle_in_reference(particle, ref_file):
+    """
+    find the particle in the pdg ascii file
 
+    :param particle: pdg name of the particle
+    :type particle: string
+
+    :param ref_file: the file which should be searched
+    :type ref_file: open file handle
+
+
+    :returns: - (*int*) file position for the begin of the decay
+              - (*int*) linenumber of the first line for the decay of this particle
+              - (*int*) decay length
+    """
+    string_found = -1
+    linenumber_begin_decay = 0
+    for line in iter(ref_file.readline, ''):
+        linenumber_begin_decay += 1
+        string_found=line.find(particle + " DECAY MODES")
+        if (string_found != -1):
+            file_position_begin_decay = ref_file.tell()
+            break
+#   if (string_found == -1):
+    else:
+        print "String '%s DECAY MODES' not found!" % (particle)
+        raise SystemExit(os.EX_DATAERR)
+
+
+
+    string_found = -1
+    linenumber_end_decay = linenumber_begin_decay
+    end_decay_string = "==========================================="
+    for line in iter(ref_file.readline, ''):
+        linenumber_end_decay += 1
+        string_found=line.find(end_decay_string)
+        if (string_found != -1):
+            break
+        if (line == ""):
+            print "String '%s' not found!" % (end_decay_string)
+            raise SystemExit(os.EX_DATAERR)
+
+    decay_length = (linenumber_end_decay -2) - (linenumber_begin_decay + 2)
+#    print "decay_length", decay_length
+    return file_position_begin_decay, linenumber_begin_decay, decay_length
 
 
 
