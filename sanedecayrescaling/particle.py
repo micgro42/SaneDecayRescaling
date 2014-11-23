@@ -1,7 +1,9 @@
 """
 provides the wrapperclass to compare and modify evtgen source files
 """
-import sanedecayrescaling
+import sanedecayrescaling.extract_decays
+import sanedecayrescaling.check_sanity
+import sanedecayrescaling.utility
 from sanedecayrescaling.translate_particles import HepTranslator
 import os
 class ParticleDecays(object):
@@ -60,4 +62,10 @@ class ParticleDecays(object):
         self.source_lines = self.source_file.readlines()
 
     def check_sanity(self):
-        pass
+        if self.ref_file_path is '':
+            print "reference path missing"
+            exit()
+        if self.source_file_path is '':
+            print "source path missing"
+            exit()
+        sanedecayrescaling.check_sanity.check_sanity(self.source_file_path, self.ref_file, self.particle)
