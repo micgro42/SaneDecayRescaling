@@ -2,7 +2,7 @@
 """
 import os
 import sanedecayrescaling
-def extract_decays_from_decay(path_to_decay_file, particle, work_file_name = "workfile.tmp"):
+def extract_decays_from_decay(path_to_decay_file, particle, work_file_name="workfile.tmp"):
     """get the decays from an EvtGen Decay.Dec file and write them to disk
 
     returns:
@@ -21,19 +21,19 @@ def extract_decays_from_decay(path_to_decay_file, particle, work_file_name = "wo
     while (stringfound == -1):
         linenumber_begin_decay += 1
         line = evtgen_decay_dec.readline()
-        stringfound=line.find("Decay " + particle +"\n")
+        stringfound = line.find("Decay " + particle + "\n")
         if (line == ""):
             print "String 'Decay %s' not found!" % (particle)
             raise SystemExit(os.EX_DATAERR)
 
     stringfound = -1
-    workfile = open(work_file_name,'w')
+    workfile = open(work_file_name, 'w')
     workfile.write(line)
     linenumber_end_decay = linenumber_begin_decay
     while (stringfound == -1):
         linenumber_end_decay += 1
         line = evtgen_decay_dec.readline()
-        stringfound=line.find("Enddecay\n")
+        stringfound = line.find("Enddecay\n")
         workfile.write(line)
         if (line == ""):
             print "String 'Enddecay' not found!"
@@ -43,7 +43,7 @@ def extract_decays_from_decay(path_to_decay_file, particle, work_file_name = "wo
     evtgen_decay_dec.close()
     return 0
 
-def extract_decays_from_reference(path_to_reference_file, particle, ref_file_name = "workreffile.tmp"):
+def extract_decays_from_reference(path_to_reference_file, particle, ref_file_name="workreffile.tmp"):
     """
     Extracts decay of particle from reference file
 
@@ -139,16 +139,16 @@ def extract_decay_from_lines(lines):
         scale = 0.01
         column2 = column2.rstrip('%')
     exponent_position = column2.find('E-')
-    if ( exponent_position != -1):
-        scale = 1 / (10 ** float(column2[exponent_position+2]))
+    if (exponent_position != -1):
+        scale = 1 / (10 ** float(column2[exponent_position + 2]))
         column2 = column2[:exponent_position]
 
 # get daughters
     while (column1[0] == '.'):
         column1 = column1[1:]
     daughters = column1.split()
-    #defold multiplicity
-    for index,daughter in enumerate(daughters):
+    # defold multiplicity
+    for index, daughter in enumerate(daughters):
         if (daughter[0].isdigit()):
             mutliplicity = int(daughter[0])
             daughter = daughter[1:]
@@ -159,7 +159,7 @@ def extract_decay_from_lines(lines):
     subdecay_br = 0
     subdecay_brep = 0
     subdecay_brem = 0
-    if (',' in daughters): # /todo there is possibly more than one subdecay per decay
+    if (',' in daughters):  # /todo there is possibly more than one subdecay per decay
         sep_position = daughters.index(',')
         subdecay = daughters[sep_position + 1:]
         print subdecay
@@ -168,9 +168,9 @@ def extract_decay_from_lines(lines):
         subdecay_mother = subdecay.pop(0)
         subdecay_daughters = subdecay[1:]
         try:
-            with sanedecayrescaling.particle.ParticleDecays(subdecay_mother, ref_file_path = 'PDG2012-SummaryTables-ASCII.txt') as subdecay:#/todo get the ref_file_path from an argument or variable
+            with sanedecayrescaling.particle.ParticleDecays(subdecay_mother, ref_file_path='PDG2012-SummaryTables-ASCII.txt') as subdecay:  # /todo get the ref_file_path from an argument or variable
                 subdecay_br, subdecay_brep, subdecay_brem = subdecay.get_branching_fraction(subdecay_daughters)
-        except: #/todo: decent exception handling
+        except:  # /todo: decent exception handling
             pass
 
 # get branching fraction and errors
@@ -178,7 +178,7 @@ def extract_decay_from_lines(lines):
         column2[0]
     except IndexError:
         raise sanedecayrescaling.utility.BadData(lines, daughters)
-    if (column2[0] == '('): #default
+    if (column2[0] == '('):  # default
         column2 = column2.lstrip('(')
         column2 = column2.rstrip(')')
         column2 = column2.strip()
@@ -189,31 +189,31 @@ def extract_decay_from_lines(lines):
         else:
             branching_fraction_error_plus = column2.split('+')[1].split('-')[0]
             branching_fraction_error_minus = column2.split('-')[1]
-    elif (column2[0] == '<'): #limit
+    elif (column2[0] == '<'):  # limit
         column2 = column2.lstrip('<')
         column2 = column2.strip()
         branching_fraction = column2
         branching_fraction_error_plus = 0
         branching_fraction_error_minus = 0
-    elif (column2[0] == 's'): #seen
+    elif (column2[0] == 's'):  # seen
         branching_fraction = 0
         branching_fraction_error_plus = 0
         branching_fraction_error_minus = 0
         scale = 0
-    elif (column2[0] == 'n'): #not seen
+    elif (column2[0] == 'n'):  # not seen
         branching_fraction = 0
         branching_fraction_error_plus = 0
         branching_fraction_error_minus = 0
         scale = 0
-    elif (column2[0] == 'l'): #large
+    elif (column2[0] == 'l'):  # large
         pass
-    elif (column2[0] == 'd'): #dominant
+    elif (column2[0] == 'd'):  # dominant
         branching_fraction = 1
         branching_fraction_error_plus = 0
         branching_fraction_error_minus = 0
         scale = 1
     else:
-        raise sanedecayrescaling.utility.ParseError(lines,"first char in '" + column2 + "' not implemented")
+        raise sanedecayrescaling.utility.ParseError(lines, "first char in '" + column2 + "' not implemented")
 
     try:
         branching_fraction = float(branching_fraction)
@@ -223,13 +223,13 @@ def extract_decay_from_lines(lines):
         print "branching_fraction:", branching_fraction
         print "branching_fraction_error_plus:", branching_fraction_error_plus
         print "branching_fraction_error_minus:", branching_fraction_error_minus
-        raise sanedecayrescaling.utility.ParseError(lines,"failed to parse branching fraction correctly")
+        raise sanedecayrescaling.utility.ParseError(lines, "failed to parse branching fraction correctly")
     else:
         branching_fraction = branching_fraction * scale
         branching_fraction_error_plus = branching_fraction_error_plus * scale
         branching_fraction_error_minus = branching_fraction_error_minus * scale
         if (subdecay_br > 0):
-            branching_fraction = branching_fraction/subdecay_br
+            branching_fraction = branching_fraction / subdecay_br
 
 
     return daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus
@@ -314,24 +314,24 @@ def make_single_line_snippets(input_lines):
         if (first_column[1] == ''):
             first_column.pop(1)
         else:
-            raise sanedecayrescaling.utility.ParseError(input_lines,"string '" + first_column[1] + "' should be empty")
+            raise sanedecayrescaling.utility.ParseError(input_lines, "string '" + first_column[1] + "' should be empty")
     if (len(first_column) == 1):
         first_column = first_column[0]
         first_column = first_column.strip()
     else:
-        raise sanedecayrescaling.utility.ParseError(input_lines,"the list first_column should only have 1 item, but it currently has " + str(len(first_column)) + ":" + str(first_column))
+        raise sanedecayrescaling.utility.ParseError(input_lines, "the list first_column should only have 1 item, but it currently has " + str(len(first_column)) + ":" + str(first_column))
     if (len(second_column) == 1):
         second_column = second_column[0]
         second_column = second_column.strip()
     else:
         print "the list second_column should only have 1 item, but it currently has " + str(len(second_column))
         print input_lines
-        raise sanedecayrescaling.utility.ParseError(input_lines,"the list second_column should only have 1 item, but it currently has " + str(len(second_column)))
+        raise sanedecayrescaling.utility.ParseError(input_lines, "the list second_column should only have 1 item, but it currently has " + str(len(second_column)))
     if (len(third_column) == 1):
         third_column = third_column[0]
         third_column = third_column.strip()
     else:
-        raise sanedecayrescaling.utility.ParseError(input_lines,"the list third_column should only have 1 item, but it currently has " + len(third_column))
+        raise sanedecayrescaling.utility.ParseError(input_lines, "the list third_column should only have 1 item, but it currently has " + len(third_column))
 
     while (len(mini_column) > 1):
         mini_column[0] = mini_column[0] + mini_column[1]
@@ -397,7 +397,7 @@ def find_particle_in_reference(particle, ref_file):
     linenumber_begin_decay = 0
     for line in iter(ref_file.readline, ''):
         linenumber_begin_decay += 1
-        string_found=line.find(particle + " DECAY MODES")
+        string_found = line.find(particle + " DECAY MODES")
         if (string_found != -1):
             file_position_begin_decay = ref_file.tell()
             break
@@ -413,14 +413,14 @@ def find_particle_in_reference(particle, ref_file):
     end_decay_string = "==========================================="
     for line in iter(ref_file.readline, ''):
         linenumber_end_decay += 1
-        string_found=line.find(end_decay_string)
+        string_found = line.find(end_decay_string)
         if (string_found != -1):
             break
         if (line == ""):
             print "String '%s' not found!" % (end_decay_string)
             raise SystemExit(os.EX_DATAERR)
 
-    decay_length = (linenumber_end_decay -2) - (linenumber_begin_decay + 2)
+    decay_length = (linenumber_end_decay - 2) - (linenumber_begin_decay + 2)
 #    print "decay_length", decay_length
     return file_position_begin_decay, linenumber_begin_decay, decay_length
 
