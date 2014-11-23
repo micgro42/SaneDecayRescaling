@@ -1,5 +1,5 @@
 import os
-import sanedecayrescaling
+import sanedecayrescaling.extract_decays
 
 
 def check_sanity(path_to_decayfile, path_to_referencefile, particle):
@@ -18,7 +18,11 @@ def check_sanity(path_to_decayfile, path_to_referencefile, particle):
         raise SystemExit(os.EX_DATAERR)
 
     workfile = sanedecayrescaling.utility.open_file_safely("workfile.tmp", 'r')
-    referencefile = sanedecayrescaling.utility.open_file_safely(path_to_referencefile, 'r')
+    if isinstance(path_to_referencefile,file):
+        referencefile = path_to_referencefile
+    else:
+        referencefile = sanedecayrescaling.utility.open_file_safely(path_to_referencefile, 'r')
+
     generators_set = get_generators()
 
     number_of_decays_found = 0
