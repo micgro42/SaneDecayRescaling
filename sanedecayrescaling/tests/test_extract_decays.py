@@ -1,5 +1,6 @@
 import os
-import sanedecayrescaling
+import sanedecayrescaling.extract_decays
+import sanedecayrescaling.translate_particles
 from pytest import fixture
 import pytest
 

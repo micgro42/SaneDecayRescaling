@@ -1,4 +1,4 @@
-import sanedecayrescaling
+import sanedecayrescaling.extract_decays
 from sanedecayrescaling.utility import *
 
 def test_three_lines_break_both_columns_no_mini():
