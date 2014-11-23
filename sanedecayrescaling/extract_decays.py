@@ -58,60 +58,60 @@ def extract_decays_from_reference(path_to_reference_file, particle, ref_file_nam
     """
     _t = sanedecayrescaling.translate_particles.HepTranslator()
     particle = _t.translate_evtgen_to_pdg(particle)
-    reference_file = sanedecayrescaling.utility.open_file_safely(path_to_reference_file, 'r')
+    # reference_file = sanedecayrescaling.utility.open_file_safely(path_to_reference_file, 'r')
+    with open(path_to_reference_file, 'r') as reference_file:
+        file_position_begin_decay, linenumber_begin_decay, decay_length = find_particle_in_reference(particle, reference_file)
+        reference_file.seek(file_position_begin_decay, 0)
+        reference_file.readline()
+        reference_file.readline()
 
-    file_position_begin_decay, linenumber_begin_decay, decay_length = find_particle_in_reference(particle, reference_file)
-    reference_file.seek(file_position_begin_decay, 0)
-    reference_file.readline()
-    reference_file.readline()
-
-    work_reference_file = open(ref_file_name,'w')
-    work_reference_file.write("Decay " + _t.translate_pdg_to_evtgen(particle) +"\n")
-    position_in_decay = 0
-    for line in iter(reference_file.readline, ''):
-        position_in_decay += 1
-        if (position_in_decay > decay_length ):
-            break
-        if (line == '\n'):
-            continue
-        if (line[0] == ' '):
-            continue
-        if (line[0] == '['):
-            continue # TODO: Confirm that this is actually correct behavior
-        decay_lines = line
-        if (line.find('\\') != -1):
-            next_line = reference_file.readline()
-            decay_lines = decay_lines + next_line
+        work_reference_file = open(ref_file_name, 'w')
+        work_reference_file.write("Decay " + _t.translate_pdg_to_evtgen(particle) + "\n")
+        position_in_decay = 0
+        for line in iter(reference_file.readline, ''):
             position_in_decay += 1
-            if (next_line.find('\\') != -1):
+            if (position_in_decay > decay_length):
+                break
+            if (line == '\n'):
+                continue
+            if (line[0] == ' '):
+                continue
+            if (line[0] == '['):
+                continue  # TODO: Confirm that this is actually correct behavior
+            decay_lines = line
+            if (line.find('\\') != -1):
                 next_line = reference_file.readline()
                 decay_lines = decay_lines + next_line
                 position_in_decay += 1
+                if (next_line.find('\\') != -1):
+                    next_line = reference_file.readline()
+                    decay_lines = decay_lines + next_line
+                    position_in_decay += 1
 
 
-        try:
-            daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decay_from_lines(decay_lines)
-        except (IndexError) as ex:
-            print "IndexError in line", linenumber_begin_decay + position_in_decay + 2
-            print decay_lines
-            raise
-        except (sanedecayrescaling.utility.ParseError) as ex:
-            print "ParseError in line", linenumber_begin_decay + position_in_decay + 2
-            print ex.msg
-            print ex.line
-            raise
-        except (sanedecayrescaling.utility.BadData) as ex:
-            daughters = ex.daughters
-            branching_fraction = "bad"
-            branching_fraction_error_plus = "bad"
-            branching_fraction_error_minus = "bad"
-        except:
-            print "Error in line", linenumber_begin_decay + position_in_decay + 2
-            raise
-        for i, daughter_in_decay in enumerate(daughters):
-            daughters[i] = _t.translate_pdg_to_evtgen(daughter_in_decay)
-        extracted_line = str(branching_fraction) + ' ' + str(branching_fraction_error_plus) + ' ' + str(branching_fraction_error_minus) + ' ' + ' '.join(daughters) + '\n'
-        work_reference_file.write(extracted_line)
+            try:
+                daughters, branching_fraction, branching_fraction_error_plus, branching_fraction_error_minus = extract_decay_from_lines(decay_lines)
+            except (IndexError) as ex:
+                print "IndexError in line", linenumber_begin_decay + position_in_decay + 2
+                print decay_lines
+                raise
+            except (sanedecayrescaling.utility.ParseError) as ex:
+                print "ParseError in line", linenumber_begin_decay + position_in_decay + 2
+                print ex.msg
+                print ex.line
+                raise
+            except (sanedecayrescaling.utility.BadData) as ex:
+                daughters = ex.daughters
+                branching_fraction = "bad"
+                branching_fraction_error_plus = "bad"
+                branching_fraction_error_minus = "bad"
+            except:
+                print "Error in line", linenumber_begin_decay + position_in_decay + 2
+                raise
+            for i, daughter_in_decay in enumerate(daughters):
+                daughters[i] = _t.translate_pdg_to_evtgen(daughter_in_decay)
+            extracted_line = str(branching_fraction) + ' ' + str(branching_fraction_error_plus) + ' ' + str(branching_fraction_error_minus) + ' ' + ' '.join(daughters) + '\n'
+            work_reference_file.write(extracted_line)
 
     work_reference_file.write('Enddecay\n')
     work_reference_file.close()
