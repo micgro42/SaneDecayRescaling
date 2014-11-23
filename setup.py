@@ -23,7 +23,7 @@ class PyTest(TestCommand):
 config = {
     'name': 'SaneDecayRescaling',
     'description': 'My Project',
-    'author': 'Michael Groﬂe',
+    'author': 'Michael Gro√üe',
     'url': 'https://github.com/micgro42/SaneDecayRescaling',
     'download_url': 'https://github.com/micgro42/SaneDecayRescaling',
     'author_email': 'micgro42@physik.hu-berlin.de',
@@ -37,6 +37,11 @@ config = {
     'packages': ['sanedecayrescaling','sanedecayrescaling.tests'],
     'scripts': [],
     'long_description': open('README.rst', 'r').read(),
+    'classifiers': [
+        "Development Status :: 2 - Pre-Alpha",
+        "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+        "Intended Audience :: Science/Research",
+    ],
 }
 
 setup(**config)
