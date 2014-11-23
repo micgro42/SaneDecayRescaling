@@ -35,7 +35,7 @@ config = {
         'testing': ['pytest'],
     },
     'packages': ['sanedecayrescaling','sanedecayrescaling.tests'],
-    'scripts': [],
+    'scripts': ['bin/check-decay.py'],
     'long_description': open('README.rst', 'r').read(),
     'classifiers': [
         "Development Status :: 2 - Pre-Alpha",
